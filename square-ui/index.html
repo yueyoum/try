@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" href="app.css" />
+    <!--[if lte IE 8]>
+         <link rel="stylesheet" href="ie.css" />
+    <![endif]-->
+    <script type="text/javascript" src="jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.bpopup.min.js"></script>
+    <script type="text/javascript" src="js/square.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var pos = navigator.appName === 'Microsoft Internet Explorer' ? 'absolute' : 'fixed';
+            $('#show').bind('click', function(e){
+                e.preventDefault();
+                $('#register-modal').each(function(index, item){
+                    $(item).children('.header').children('.close').bind('click', function(){
+                        $(this).unbind('click');
+                        $(item).bPopup().close();
+                    });
+                    $(item).bPopup({
+                        followSpeed: 100,
+                        opacity: 0.4,
+                        positionStyle: pos,
+                        transition: 'slideDown'
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="nav-bar">
+    <div class="nav-bar-inner">
+        <span class="logo">
+            <a href="">This is Logo</a>
+        </span>
+
+
+        <span class="left-group">
+            <a href="">One</a>
+            <a class="dropdown" href="">Two</a>
+            <ul>
+                <li>你没啊<a href="">地方南方的</a></li>
+                <li>的发发<a href="">的的的</a></li>
+                <li>顶顶顶顶<a href="">aaa</a></li>
+            </ul>
+            <a href="">Three</a>
+            <a class="dropdown" href="">Four</a>
+            <ul>
+                <li class="link"><a href="">One</a></li>
+                <li class="link"><a href="">Two</a></li>
+                <li class="link"><a href="">Three</a></li>
+                <li class="link"><a href="">Four</a></li>
+                <li class="link"><a href="">Five</a></li>
+            </ul>
+        </span>
+        <span class="right-group">
+            <a href="">Five</a>
+            <a href="">Six</a>
+        </span>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<div id="main">
+<div style="height: 200px; margin-top:100px; background-color: gray;"></div>
+<button id="show" class="button bg-color-pinkDark">发帖啦</button>
+<button id="show1" class="button small bg-color-pinkDark fg-color-blueLight">show</button>
+<button id="show2" class="button big bg-color-pinkLight fg-color-greenLight">show</button>
+<button id="shows" class="button bg-color-magenta">show</button>
+
+<hr />
+<button class="button bg-color-blueLight">OK</button>
+<button class="button bg-color-blue">OK</button>
+<button class="button bg-color-blueDark">OK</button>
+<button class="button bg-color-greenLight">OK</button>
+<button class="button bg-color-green">OK</button>
+<button class="button bg-color-greenDark">OK</button>
+<button class="button bg-color-cyanLight">OK</button>
+<button class="button bg-color-cyan">OK</button>
+<button class="button bg-color-cyanDark">OK</button>
+<button class="button bg-color-pinkLight">OK</button>
+<button class="button bg-color-pink">OK</button>
+<button class="button bg-color-pinkDark">OK</button>
+<hr />
+<button class="button bg-color-magentaLight">OK</button>
+<button class="button bg-color-magenta">OK</button>
+<button class="button bg-color-magentaDark">OK</button>
+<button class="button bg-color-redLight">OK</button>
+<button class="button bg-color-red">OK</button>
+<button class="button bg-color-redDark">OK</button>
+<button class="button bg-color-grayLight">OK</button>
+<button class="button bg-color-gray">OK</button>
+<button class="button bg-color-grayDark">OK</button>
+
+<button class="button bg-color-cyanBlueLight">OK</button>
+<button class="button bg-color-cyanBlue">OK</button>
+<button class="button bg-color-cyanBlueDark">OK</button>
+
+<hr />
+<div><a class="button bg-color-magentaDark" href="">好啊</a></div>
+
+<div style="height: 1000px; margin-top:100px; background-color: gray;"></div>
+
+<div class="modal">
+    <div class="header">
+        <span class="title">This is Title</span>
+        <span class="close">X</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">This is content</div>
+</div>
+
+<div class="modal" id="login-modal">
+    <div class="header">
+        <span class="title">Login</span>
+        <span class="close">X</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <form action="">
+            <input id="" type="text" name="email" />
+            <input id="" type="password" name="passwd" />
+            <input type="submit" value="login" />
+        </form>
+        <div>
+            <p>qq</p>
+            <p>baidu</p>
+            <p>weibo</p>
+            <p>renren</p>
+            <p>wangyi</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="register-modal">
+    <div class="header">
+        <span class="title">Register</span>
+        <span class="close">关闭</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <form action="">
+            <div class="input-control">
+                <label for="rName">昵称:</label>
+                <input id="rName" type="text" name="" />
+            </div>
+            <div class="input-control">
+                <label for="rEmail">电子邮件:</label>
+                <input id="rEmail" type="text" name="" />
+            </div>
+            <div class="input-control">
+                <label for="rP">密码</label>
+                <input id="rP" type="text" name="" />
+            </div>
+            <div class="input-control">
+                <label for="rP2">重复密码</label>
+                <input id="rP2" type="text" name="" />
+            </div>
+            <input type="submit" value="注册" class="button bg-color-magenta"/>
+        </form>
+
+        <div>
+            <p>qq</p>
+            <p>baidu</p>
+            <p>weibo</p>
+            <p>renren</p>
+            <p>wangyi</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+body {
+    background: url(/static/img/bgtile.gif) repeat;
+}
+
+.social-list {
+    padding-left: 20px;
+    margin-left: 20px;
+    border-left: 1px solid gray;
+
+    p {
+        font-size: 18px;
+        color: gray;
+    }
+
+    div {
+        margin-bottom: 20px;
+
+        a {
+            display: block;
+            font-size: 16px;
+            line-height: 40px;
+            width: 180px;
+            padding-left: 20px;
+            background-color: green;
+        }
+    }
+}
+
+
+@siteMainWidth:  unit(@mainWidth);
+@siteRightWidth:  300;
+
+@siteLeftWidth: @siteMainWidth - @siteRightWidth - 20;
+
+@shrink:    100px;
+
+#mainLeft {
+    float: left;
+    width: unit(@siteLeftWidth, px);
+}
+
+#mainRight {
+    float: right;
+    width: unit(@siteRightWidth, px);
+    background: gray;
+    height: 500px;
+}
+
+
+.input-control.vertical {
+    label {
+        display: block;
+        width: @siteLeftWidth - @shrink + 2px;
+        padding: 4px 10px;
+        text-align: left;
+    }
+
+
+    input {
+        width: @siteLeftWidth - @shrink;
+        background-color: @white;
+        color: @black;
+        font-size: 16px;
+        padding: 4px 10px;
+    }
+
+    textarea {
+        width: @siteLeftWidth - @shrink;
+        height: 150px;
+        resize: vertical;
+        color: @black;
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+
+
+#postbody-modal {
+    .oldtext {
+        width: @siteLeftWidth - @shrink;
+        padding: 10px;
+        color: #666;
+        font-size: 16px;
+    }
+}
+
+
+@listViewBorderColor:   #eee;
+@avatarPadding:     6px;
+@avatarWidth:       42px;
+@contentWidth:      @siteLeftWidth - @avatarWidth - @avatarPadding*2 - 1px - 2px;
+@forkMarginLeft:    @avatarWidth + @avatarPadding*2 + 1px;
+
+
+.shadowed-box (@bx: 0px, @by: 5px, @bblur: 5px, @bs: -2px) {
+    -moz-box-shadow: @bx @by @bblur @bs #aaa;
+    -webkit-box-shadow: @bx @by @bblur @bs #aaa;
+    box-shadow: @bx @by @bblur @bs #aaa;
+}
+
+.shadowed-box-inner (@bx: 0px, @by: 5px, @bblur: 5px, @bs: -2px) {
+    -moz-box-shadow:inset @bx @by @bblur @bs #aaa;
+    -webkit-box-shadow:inset @bx @by @bblur @bs #aaa;
+    box-shadow:inset @bx @by @bblur @bs #aaa;
+}
+
+.list-view {
+    width: 100%;
+    margin-bottom: 20px;
+
+    .avatar {
+        float: left;
+        padding: @avatarPadding;
+        width: @avatarWidth;
+        height: @avatarWidth;
+        overflow: hidden;
+        border-top: 1px solid @listViewBorderColor;
+        border-bottom: 1px solid @listViewBorderColor;
+        border-left: 1px solid @listViewBorderColor;
+        background-color: #fff;
+    }
+
+    .content {
+        float: left;
+        width: @contentWidth;
+        border: 1px solid @listViewBorderColor;
+        border-bottom: none;
+        margin-bottom: 10px;
+        position: relative;
+        background-color: #fff;
+        .shadowed-box;
+
+
+        a {
+            color: @cyanDark;
+            padding: 2px 4px;
+        }
+
+        a:hover {
+            color: @white;
+            background-color: @magenta;
+        }
+
+        div.mask {
+            width: 10px;
+            height: @avatarWidth + @avatarPadding * 2;
+            position: absolute;
+            top: 0;
+            left: -1px;
+            background-color: #fff;
+        }
+
+        div.base {
+            padding: 10px 20px;
+
+            p {
+                width: 100%;
+                margin: 0;
+                //overflow: hidden;
+                color: @gray;
+                font-size: 12px;
+
+                &.title {
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-top: 10px;
+                }
+
+                &.text {
+                    font-size: 16px;
+                    color: @black;
+                    margin: 15px 0;
+                }
+
+                &.time {
+                }
+
+            }
+        }
+
+        div.extra {
+            background-color: #DCDCDC;
+            padding: 10px 20px;
+            line-height: 20px;
+
+            button {
+                color: #337FA3;
+                background: none;
+            }
+
+            &.fork {
+                background-color: #337FA3;
+                button {
+                    color: @white;
+                }
+            }
+        }
+    }
+
+
+    .forksarea {
+        width: @siteLeftWidth - @forkMarginLeft;
+        margin-left: @forkMarginLeft;
+        //display: none;
+
+        .fork-view {
+            margin: 0 0 10px 0;
+            .avatar {
+                padding: @avatarPadding;
+                width: @avatarWidth - 10px;
+                height: @avatarWidth - 10px;
+            }
+
+            .content {
+                width: @contentWidth - @forkMarginLeft + 10px;
+
+                div.mask {
+                    height: @avatarWidth - 10px + @avatarPadding * 2;
+                }
+
+                div.base {
+                    a {
+                        padding: 0;
+                    }
+
+                    p.text {
+                        font-size: 14px;
+                    }
+                
+                }
+
+                div.extra {
+                    padding: 5px 16px;
+                }
+            }
+
+        }
+
+    }
+}
+
+.item-button {
+    margin: 0 10px 0 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+
+
+    .icon {
+        .left;
+        width: 20px;
+        height: 20px;
+        background: transparent url(/static/img/icons.png) no-repeat scroll;
+
+        &.good {
+            background-position: 0px -20px;
+        }
+
+        &.bad {
+            background-position: 0px -69px;
+        }
+
+    }
+
+    .num {
+        .right;
+        line-height: 20px;
+        padding: 0 4px;
+    }
+
+}
+
+
+.write-new {
+    margin: -10px 0;
+    padding: 0 10px;
+    background: none;
+    width: auto;
+    height: auto;
+
+    .icon {
+        .left;
+        width: 30px;
+        height: 30px;
+        margin-top: 5px;
+        background: transparent url(/static/img/icons.png) no-repeat scroll -24px -28px;
+    }
+    
+    .text {
+        .left;
+        line-height: 40px;
+    }
+
+}
+
+.has-fork {
+    .write-new;
+    .icon {
+        background: transparent url(/static/img/icons.png) no-repeat scroll -24px -55px;
+    }
+}
+
+
+.w100 {
+    width: 100%;
+    margin: 20px 0 0 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+

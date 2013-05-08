@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}square/js/jquery.bpopup.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/project.js"></script>
+    <!-- [if lte IE 6]>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-ie.js"></script>
+    <![endif]-->
+    {% block js %}
+    {% endblock %}
+    <!-- [if lte IE 6]>
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-ie6.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/ie.css" />
+    <![endif]-->
+
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}square/css/square.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+
+
+<div id="nav-bar">
+    <div class="nav-bar-inner">
+        <span class="logo">
+            <a href="/">This is Logo</a>
+        </span>
+
+
+        <span class="left-group">
+            <a href="/hot/day">今日热门</a>
+            <a href="/hot/week">本周热门</a>
+        </span>
+        <span class="right-group">
+            {% with user=request.siteuser %}
+            <a href="" class="highlight open-modal" modal-window-id="{% if user %}posthead-modal{% else %}login-modal{% endif %}">
+                发新贴
+            </a>
+            {% if user %}
+                <a href="">消息</a>
+                <a href="" class="dropdown last" dropdown_align='right'>
+                    <img src="{{ user.avatar }}" alt="" class="right"/>
+                    <span>{{ user.username }}</span>
+                </a>
+                <ul>
+                    <li class="link"><a href="">我发布的帖子</a></li>
+                    <li class="link"><a href="">我关注的帖子</a></li>
+                    <li class="link"><a href="">帐号设置</a></li>
+                    <li class="link"><a href="" id="accoutLogout">退出</a></li>
+                </ul>
+            {% else %}
+                <a href="" class="open-modal", modal-window-id="login-modal">登录</a>
+                <a href="" class="open-modal last", modal-window-id="register-modal">注册</a>
+            {% endif %}
+            {% endwith %}
+        </span>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+
+<div id="main">
+    <div id="mainLeft">{% block mainLeft %}{% endblock %}</div>
+    <div id="mainRight">this is right panel</div>
+    <div class="clear"></div>
+</div>
+
+
+<div id="login-modal" class="modal">
+    <div class="header">
+        <span class="title">登录</span>
+        <span class="close">关闭</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <div class="left">
+            <form action="">{% csrf_token %}
+                <div class="input-control">
+                    <label for="lEmail">电子邮件</label>
+                    <input id="lEmail" type="text" name="email" />
+                </div>
+                <div class="input-control">
+                    <label for="lP">密码</label>
+                    <input id="lP" type="password" name="passwd" />
+                </div>
+                <input type="submit" value="登录" class="button bg-color-magenta" id="accoutLogin"/>
+            </form>
+            <div id="loginWaring" class="waring"></div>
+        </div>
+        <div class="social-list right">
+            <p>使用 合作网站 帐号登录</p>
+            <div><a href="">微博   帐号登录</a></div>
+            <div><a href="">人人网 帐号登录</a></div>
+            <div><a href="">QQ     帐号登录</a></div>
+            <div><a href="">百度   帐号登录</a></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+
+
+<div class="modal" id="register-modal">
+    <div class="header">
+        <span class="title">注册</span>
+        <span class="close">关闭</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <div class="left">
+            <form action="">{% csrf_token %}
+                <div class="input-control">
+                    <label for="rEmail">电子邮件</label>
+                    <input id="rEmail" type="text" name="email" />
+                </div>
+                <div class="input-control">
+                    <label for="rName">昵称</label>
+                    <input id="rName" type="text" name="name" />
+                </div>
+                <div class="input-control">
+                    <label for="rP">密码</label>
+                    <input id="rP" type="password" name="passwd" />
+                </div>
+                <div class="input-control">
+                    <label for="rP2">重复密码</label>
+                    <input id="rP2" type="password" name="passwd2" />
+                </div>
+                <input type="submit" value="注册" class="button bg-color-magenta" id="accoutRegister"/>
+            </form>
+            <div id="registerWaring" class="waring"></div>
+        </div>
+
+        <div class="social-list right">
+            <p>使用 合作网站 帐号登录</p>
+            <div><a href="">微博   帐号登录</a></div>
+            <div><a href="">人人网 帐号登录</a></div>
+            <div><a href="">QQ     帐号登录</a></div>
+            <div><a href="">百度   帐号登录</a></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="posthead-modal">
+    <div class="header">
+        <span class="title">新贴</span>
+        <span class="close">关闭</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <form action="">{% csrf_token %}
+            <div class="input-control vertical">
+                <label for="nPostHead">吸引眼球的标题</label>
+                <input id="nPostHead" type="text" name="posthead" />
+            </div>
+            <div class="input-control vertical">
+                <label for="nPostContent">毫无节操的内容</label>
+                <textarea id="nPostContent" name="postcontent" cols="80" rows="10"></textarea>
+            </div>
+            <input type="submit" value="发布" class="button w100 bg-color-magenta" id="postNewHead"/>
+        </form>
+        <div id="postHeadWarning" class="waring"></div>
+    </div>
+</div>
+
+
+
+<div class="modal" id="postbody-modal">
+    <div class="header">
+        <span class="title">新的发展</span>
+        <span class="close">关闭</span>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <div class="oldtext"></div>
+        <form action="">{% csrf_token %}
+            <input id="nBodyHeadID" type="hidden">
+            <input id="nBodyParentID" type="hidden">
+            <div class="input-control vertical">
+                <label for="nBodyContent">新的发展</label>
+                <textarea id="nBodyContent" name="bodycontent" cols="80" rows="10"></textarea>
+            </div>
+            <input type="submit" value="跟帖" class="button w100 bg-color-magenta" id="postNewBody"/>
+        </form>
+        <div id="postBodyWarning" class="waring"></div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
+

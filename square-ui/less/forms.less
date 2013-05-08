@@ -1,0 +1,58 @@
+@inputColor:    @grayLight;
+
+.square-input {
+    border: 1px solid @inputColor;
+    padding: 0 6px;
+    margin: 0;
+    width: 220px;
+    height: 28px;
+    color: @black;
+    background-color: @inputColor;
+}
+
+
+.input-control {
+    margin: 0 0 10px 0;
+    background-color: @inputColor;
+    //color: @black;
+
+    label {
+        display: inline-block;
+        padding: 0 10px 0 0;
+        background-color: @cyanBlue;
+        width: 80px;
+        color: @white;
+        text-align: right;
+        line-height: 30px;
+    }
+
+    input {
+        border: 1px solid @inputColor;
+        padding: 0 6px;
+        margin: 0;
+        width: 220px;
+        height: 28px;
+        color: @black;
+        background-color: @inputColor;
+
+        &.error {
+            border: 1px solid @red;
+        }
+
+    }
+
+    textarea {
+        border: 1px solid @inputColor;
+        padding: 6px;
+        margin: 0;
+    }
+
+    &.vertical {
+        background-color: @white;
+        label {
+            display: block;
+        }
+    }
+}
+
+

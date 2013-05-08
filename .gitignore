@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.bak
+
+env
+avatar
+.ropeproject
+

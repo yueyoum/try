@@ -223,21 +223,15 @@
 
 
 
+        // scoring posts
+        $('.item-button').click(function(){
+            if($(this).attr('cs') === '0') return false;
+            var url
+        });
+
+
 
         // change background position
-        /*
-        $('.item-button').hover(function(){
-            var $icon = $(this).find('.icon');
-            var unhover_pos = $icon.css('background-position');
-            $(this).attr('unhover_bg_pos', unhover_pos);
-            $icon.css('background-position', $(this).attr('hover_bg_pos'));
-        },
-            function(){
-                $(this).find('.icon').css('background-position', $(this).attr('unhover_bg_pos'));
-            }
-                               
-        );
-       */
         $('.item-button').mouseenter(function(){
             var $icon = $(this).find('.icon');
             var unhover_pos = $icon.css('background-position');
@@ -291,6 +285,29 @@
 
 
 
+    function set_good(post_id) {
+        if(post_id == 0) return;
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/score/good/' + post_id,
+                data: {},
+                dateType: 'json',
+                async: true,
+                success: function(data){
+                    if(data == 1) {
+                        window.location.reload();
+                    }
+                    else {
+                        return;
+                    }
+                },
+                error: function(XmlHttprequest, textStatus, errorThrown){
+                    return;
+                }
+            }
+        );
+    }
 
 
 

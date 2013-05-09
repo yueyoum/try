@@ -1,47 +1,47 @@
 {% for item in items %}
-    <div class="list-view">
+<div class="list-view" id="listview{{ item.id }}">
         <div class="avatar">
-            <img src="{{ item.post.user.avatar }}" alt="" width="42px" height="42px"/>
+            <img src="{{ item.user.avatar }}" alt="" width="42px" height="42px"/>
         </div>
         <div class="content">
             <div class="mask"></div>
             <div class="base">
                 <p class="name">
-                    <a href="">{{ item.post.user.username }}</a> ( 我才哦啊的哦能否奥山的你到能否 )
+                    <a href="">{{ item.user.username }}</a> ( 我才哦啊的哦能否奥山的你到能否 )
                 </p>
 
                 {% if is_head %}
-                <p class="title"><a href="{% url 'show_post' post_id=item.post.id %}">{{ item.post.title }}</a></p>
+                <p class="title"><a href="{% url 'show_post' post_id=item.id %}">{{ item.title }}</a></p>
                 {% endif %}
 
-                <p class="text">{{ item.post.content }}</p>
-                <p class="time">{{ item.post.posted_at }}</p>
+                <p class="text">{{ item.content }}</p>
+                <p class="time">{{ item.posted_at }}</p>
             </div>
-            <div class="extra {% if item.has_fork %}fork{% endif %}">
+            <div class="extra {% if item.post_forks %}fork{% endif %}">
                 <div class="left">
-                    <button class="button item-button" hover_bg_pos="0px 0px">
+                    <button class="button item-button" hover_bg_pos="0px 0px" tp="good" st="0" cs="1">
                         <div class="icon good"></div>
-                        <div class="num">{{ item.post.good }}</div>
+                        <div class="num">{{ item.good }}</div>
                         <div class="clear"></div>
                     </button>
-                    <button class="button item-button" hover_bg_pos="-1px -48px">
+                    <button class="button item-button" hover_bg_pos="-1px -48px" tp="bad" st="0" cs="1">
                         <div class="icon bad"></div>
-                        <div class="num">{{ item.post.bad }}</div>
+                        <div class="num">{{ item.bad }}</div>
                         <div class="clear"></div>
                     </button>
                 </div>
                 <div class="right">
                     {% if is_head %}
-                    <a href="/posts/{{ item.post.id }}" class="head-info">{{ item.post.body_count }} 跟帖</a>
+                    <a href="/posts/{{ item.id }}" class="head-info">{{ item.body_count }} 跟帖</a>
                     {% else %}
-                        {% if item.has_fork %}
-                        <button class="button has-fork" fork-id="{{ item.post.id }}">
+                        {% if item.post_forks %}
+                        <button class="button has-fork" fork-id="{{ item.id }}">
                             <div class="icon"></div>
                             <div class="text">收起分支</div>
                             <div class="clear"></div>
                         </button>
                         {% endif %}
-                        <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.post.head }} parent-id={{ item.post.id }} >
+                        <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.head }} parent-id={{ item.id }} >
                             <div class="icon"></div>
                             <div class="text">写后续</div>
                             <div class="clear"></div>
@@ -53,9 +53,9 @@
         </div>
         <div class="clear"></div>
 
-        {% if item.has_fork %}
-            <div class="forksarea" id="forksarea{{ item.post.id }}" show="1">
-                {% for fork in item.forks %}
+        {% if item.post_forks %}
+            <div class="forksarea" id="forksarea{{ item.id }}" show="1">
+                {% for fork in item.post_forks %}
                 <div class="fork-view">
                         <div class="avatar">
                             <img src="{{ fork.user.avatar }}" alt="" width="32px" height="32px"/>

@@ -443,6 +443,9 @@ a.button {
 body {
   background: url(/static/img/bgtile.gif) repeat;
 }
+.none {
+  display: none;
+}
 .social-list {
   padding-left: 20px;
   margin-left: 20px;
@@ -502,7 +505,7 @@ body {
 }
 .list-view {
   width: 100%;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 .list-view .avatar {
   float: left;

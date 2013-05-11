@@ -19,12 +19,12 @@
             </div>
             <div class="extra {% if item.post_forks %}fork{% endif %}">
                 <div class="left">
-                    <button class="button item-button {% if not item.scored %}can-score-good{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}">
+                    <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}" modal-window-id="login-modal">
                         <div class="icon good {% if item.scored_good %}scored-good{% endif %}"></div>
                         <div class="num">{{ item.good }}</div>
                         <div class="clear"></div>
                     </button>
-                    <button class="button item-button {% if not item.scored %}can-score-bad{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ item.id }}">
+                    <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-bad{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ item.id }}" modal-window-id="login-modal">
                         <div class="icon bad {% if item.scored_bad %}scored-bad{% endif %}"></div>
                         <div class="num">{{ item.bad }}</div>
                         <div class="clear"></div>
@@ -74,12 +74,12 @@
                             </div>
                             <div class="extra">
                                 <div class="">
-                                    <button class="button item-button {% if not fork.scored %}can-score-good{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ fork.id }}">
+                                    <button class="button item-button {% if request.siteuser %}{% if not fork.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ fork.id }}" modal-window-id="login-modal">
                                         <div class="icon good {% if fork.scored_good %}socred-good{% endif %}"></div>
                                         <div class="num">{{ fork.good }}</div>
                                         <div class="clear"></div>
                                     </button>
-                                    <button class="button item-button {% if not fork.scored %}can-score-bad{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ fork.id }}">
+                                    <button class="button item-button {% if request.siteuser %}{% if not fork.scored %}can-score-bad{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ fork.id }}" modal-window-id="login-modal">
                                         <div class="icon bad {% if fork.socred_bad %}socred-bad{% endif %}"></div>
                                         <div class="num">{{ fork.bad }}</div>
                                         <div class="clear"></div>

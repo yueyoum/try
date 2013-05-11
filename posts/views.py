@@ -36,9 +36,14 @@ def _scoring_guard(func):
 
 
 def set_post_score_status(pobj, uid):
-    setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
-    setattr(pobj, 'scored_bad', redis_client.sismember('bad.{0}'.format(uid), pobj.id))
-    setattr(pobj, 'scored', pobj.scored_good or pobj.scored_bad)
+    if uid:
+        setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
+        setattr(pobj, 'scored_bad', redis_client.sismember('bad.{0}'.format(uid), pobj.id))
+        setattr(pobj, 'scored', pobj.scored_good or pobj.scored_bad)
+    else:
+        setattr(pobj, 'scored_good', False)
+        setattr(pobj, 'scored_bad', False)
+        setattr(pobj, 'scored', False)
 
 
 def get_body_lists(uid, start_id, length=20):
@@ -46,7 +51,7 @@ def get_body_lists(uid, start_id, length=20):
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
         set_post_score_status(body, uid)
-        forks = BodyPost.objects.filter(parent_id=start_id).order_by('good')
+        forks = BodyPost.objects.filter(parent_id=start_id).order_by('-good')
         forks_count = forks.count()
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
@@ -153,7 +158,7 @@ def post_new_body(request):
 
 def show_post(request, post_id):
     """展示post_id及其后续的posts"""
-    uid = request.siteuser.id
+    uid = request.siteuser.id if request.siteuser else 0
     head_id = BodyPost.objects.get(id=post_id).head
     title = HeadPost.objects.get(id=head_id).title
 
@@ -180,12 +185,13 @@ def index(request):
     """首页，取HeadPost"""
     posts = HeadPost.objects.all().order_by('-updated_at')
 
-    uid = request.siteuser.id
+    uid = request.siteuser.id if request.siteuser else 0
     items = []
     for p in posts:
         set_post_score_status(p, uid)
         setattr(p, 'post_forks', False)
         items.append(p)
+
 
 
     data = {

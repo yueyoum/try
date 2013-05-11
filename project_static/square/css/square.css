@@ -612,6 +612,13 @@ body {
   padding: 0;
   width: auto;
   height: auto;
+  cursor: default;
+}
+.item-button.can-score-good {
+  cursor: pointer;
+}
+.item-button.can-score-bad {
+  cursor: pointer;
 }
 .item-button .icon {
   float: left;
@@ -622,8 +629,14 @@ body {
 .item-button .icon.good {
   background-position: 0px -20px;
 }
+.item-button .icon.scored-good {
+  background-position: 0px 0px;
+}
 .item-button .icon.bad {
   background-position: 0px -69px;
+}
+.item-button .icon.scored-bad {
+  background-position: -1px -48px;
 }
 .item-button .num {
   float: right;

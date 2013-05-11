@@ -1,6 +1,7 @@
 *.pyc
 *.swp
 *.bak
+*.rdb
 
 env
 avatar

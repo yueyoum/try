@@ -3,7 +3,6 @@ import datetime
 import json
 from functools import wraps
 
-import redis
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -11,13 +10,9 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.db.models import F
 
+from config import redis_client
 
 from .models import HeadPost, BodyPost
-from .app_settings import REDIS_HOST, REDIS_PORT
-
-
-redis_pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT)
-redis_client = redis.Redis(connection_pool=redis_pool)
 
 
 
@@ -29,10 +24,28 @@ def post_test(func):
         return func(request, *args, **kwargs)
     return deco
 
-def get_body_lists(start_id, length=20):
+
+
+def _scoring_guard(func):
+    @wraps(func)
+    def deco(self, request, *args, **kwargs):
+        if not request.siteuser or request.method != 'POST':
+            return self.response_nothing()
+        return func(self, request, *args, **kwargs)
+    return deco
+
+
+def set_post_score_status(pobj, uid):
+    setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
+    setattr(pobj, 'scored_bad', redis_client.sismember('bad.{0}'.format(uid), pobj.id))
+    setattr(pobj, 'scored', pobj.scored_good or pobj.scored_bad)
+
+
+def get_body_lists(uid, start_id, length=20):
     result = []
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
+        set_post_score_status(body, uid)
         forks = BodyPost.objects.filter(parent_id=start_id).order_by('good')
         forks_count = forks.count()
         if forks_count == 0:
@@ -45,7 +58,12 @@ def get_body_lists(start_id, length=20):
             # 没有分支，只有一个跟帖
             setattr(body, 'post_forks', [])
         else:
-            setattr(body, 'post_forks', forks[1:])
+            body_forks = []
+            for _f in forks[1:]:
+                set_post_score_status(_f, uid)
+                body_forks.append(_f)
+
+            setattr(body, 'post_forks', body_forks)
 
         result.append(body)
         start_id = forks[0].id
@@ -135,23 +153,18 @@ def post_new_body(request):
 
 def show_post(request, post_id):
     """展示post_id及其后续的posts"""
+    uid = request.siteuser.id
     head_id = BodyPost.objects.get(id=post_id).head
     title = HeadPost.objects.get(id=head_id).title
-    posts = get_body_lists(post_id)
 
-    uid = request.siteuser.id
-    items = []
-    for p in posts:
-        setattr(p, 'score_good', redis_client.sismember('good.{0}'.format(uid), p.id))
-        setattr(p, 'score_bad', redis_client.sismember('bag.{0}'.format(uid), p.id))
-        setattr(p, 'scored', p.score_good or p.score_bad)
-        items.append(p)
+    posts = get_body_lists(uid, post_id)
+
 
     data = {
         'is_head': False,
         'title': title,
         'head_id': head_id,
-        'items': items,
+        'items': posts,
     }
     return render_to_response(
         'show_post.html',
@@ -166,14 +179,14 @@ def show_post(request, post_id):
 def index(request):
     """首页，取HeadPost"""
     posts = HeadPost.objects.all().order_by('-updated_at')
-    # items = ({'post': p} for p in posts)
 
-    # uid = request.siteuser.id
-
+    uid = request.siteuser.id
     items = []
     for p in posts:
+        set_post_score_status(p, uid)
         setattr(p, 'post_forks', False)
         items.append(p)
+
 
     data = {
         'is_head': True,
@@ -189,39 +202,56 @@ def index(request):
 
 # redis scheme
 # good.<uid>: set  保存此uid打过good的所有post id
-# bag.<uid>: set   保存此uid打过bad的所有post id
+# bad.<uid>: set   保存此uid打过bad的所有post id
 
-@post_test
-def set_good(request, post_id):
-    """给帖子good"""
-    if not BodyPost.objects.filter(id=post_id)[:1].exists():
+
+class PostScoring(object):
+    def __init__(self, redis_client):
+        self.r = redis_client
+        print 'PostScoring init'
+
+    def has_scored(self, uid, pid):
+        if self.r.sismember('good.{0}'.format(uid), pid):
+            return True
+
+        if self.r.sismember('bad.{0}'.format(uid), pid):
+            return True
+
+        return False
+
+
+    def post_exist(self, pid):
+        return BodyPost.objects.filter(id=pid)[:1].exists()
+
+
+    def response_ok(self):
+        return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
+
+    def response_nothing(self):
         return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
 
 
-    uid = request.siteuser.id
-    if redis_client.sismember('good.{0}'.format(uid), post_id):
-        return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
+    @_scoring_guard
+    def set_good(self, request, pid):
+        uid = request.siteuser.id
+        if not self.post_exist(pid) or self.has_scored(uid, pid):
+            return self.response_nothing()
 
-    redis_client.sadd('good.{0}'.format(uid), post_id)
-
-    BodyPost.objects.filter(id=post_id).update(good=F('good')+1)
-    return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
-
-
-@post_test
-def set_bad(request, post_id):
-    """给帖子bad"""
-    if not BodyPost.objects.filter(id=post_id)[:1].exists():
-        return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
+        self.r.sadd('good.{0}'.format(uid), pid)
+        BodyPost.objects.filter(id=pid).update(good=F('good')+1)
+        return self.response_ok()
 
 
-    uid = request.siteuser.id
-    if redis_client.sismember('bad.{0}'.format(uid), post_id):
-        return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
+    @_scoring_guard
+    def set_bad(self, request, pid):
+        uid = request.siteuser.id
+        if not self.post_exist(pid) or self.has_scored(uid, pid):
+            return self.response_nothing()
 
-    redis_client.sadd('bad.{0}'.format(uid), post_id)
+        self.r.sadd('bad.{0}'.format(uid), pid)
+        BodyPost.objects.filter(id=pid).update(bad=F('bad')+1)
+        return self.response_ok()
 
-    BodyPost.objects.filter(id=post_id).update(bad=F('bad')+1)
-    return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
 
+post_scoring = PostScoring(redis_client)
 

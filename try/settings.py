@@ -1,11 +1,10 @@
 # Django settings for try project.
 
 import os
+import sys
+
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 PROJECT_PATH = os.path.dirname(CURRENT_PATH)
-
-# just for testing
-import sys
 sys.path.insert(0, PROJECT_PATH)
 
 

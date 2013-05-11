@@ -3,6 +3,8 @@ import datetime
 
 from django.db import models
 
+# from config import redis_client
+
 
 class HeadPost(models.Model):
     # 故事/段子的开头，body_count记录此故事有多少个延续，将其单独记录是为了方便在首页显示
@@ -11,6 +13,7 @@ class HeadPost(models.Model):
 
     body_count = models.PositiveIntegerField(default=0, db_index=True)
     updated_at = models.DateTimeField(default=datetime.datetime.now(), db_index=True)
+
 
 
     def __unicode__(self):

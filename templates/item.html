@@ -19,13 +19,13 @@
             </div>
             <div class="extra {% if item.post_forks %}fork{% endif %}">
                 <div class="left">
-                    <button class="button item-button" hover_bg_pos="0px 0px" tp="good" st="0" cs="1">
-                        <div class="icon good"></div>
+                    <button class="button item-button {% if not item.scored %}can-score-good{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}">
+                        <div class="icon good {% if item.scored_good %}scored-good{% endif %}"></div>
                         <div class="num">{{ item.good }}</div>
                         <div class="clear"></div>
                     </button>
-                    <button class="button item-button" hover_bg_pos="-1px -48px" tp="bad" st="0" cs="1">
-                        <div class="icon bad"></div>
+                    <button class="button item-button {% if not item.scored %}can-score-bad{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ item.id }}">
+                        <div class="icon bad {% if item.scored_bad %}scored-bad{% endif %}"></div>
                         <div class="num">{{ item.bad }}</div>
                         <div class="clear"></div>
                     </button>
@@ -56,7 +56,7 @@
         {% if item.post_forks %}
             <div class="forksarea" id="forksarea{{ item.id }}" show="1">
                 {% for fork in item.post_forks %}
-                <div class="fork-view">
+                <div class="fork-view" id="forkview{{ fork.id }}">
                         <div class="avatar">
                             <img src="{{ fork.user.avatar }}" alt="" width="32px" height="32px"/>
                         </div>
@@ -74,13 +74,13 @@
                             </div>
                             <div class="extra">
                                 <div class="">
-                                    <button class="button item-button" hover_bg_pos="0px 1px">
-                                        <div class="icon good"></div>
+                                    <button class="button item-button {% if not fork.scored %}can-score-good{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ fork.id }}">
+                                        <div class="icon good {% if fork.scored_good %}socred-good{% endif %}"></div>
                                         <div class="num">{{ fork.good }}</div>
                                         <div class="clear"></div>
                                     </button>
-                                    <button class="button item-button" hover_bg_pos="-1px -47px">
-                                        <div class="icon bad"></div>
+                                    <button class="button item-button {% if not fork.scored %}can-score-bad{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ fork.id }}">
+                                        <div class="icon bad {% if fork.socred_bad %}socred-bad{% endif %}"></div>
                                         <div class="num">{{ fork.bad }}</div>
                                         <div class="clear"></div>
                                     </button>

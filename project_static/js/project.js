@@ -222,16 +222,76 @@
         });
 
 
-
-        // scoring posts
-        $('.item-button').click(function(){
-            if($(this).attr('cs') === '0') return false;
-            var url
+        $('.can-score-good').click(function(){
+            var pid = $(this).attr('id').split('-')[1];
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/score/post/good/' + pid,
+                    data: {
+                        csrfmiddlewaretoken: get_csrf()
+                    },
+                    dateType: 'json',
+                    async: true,
+                    success: function(data){
+                        console.log(data);
+                        if(data === 1) {
+                            var $thisitem = $('#scoregood-' + pid);
+                            $thisitem.find('.icon').css('background-position', $thisitem.attr('hover_bg_pos'));
+                            var oldnum = $thisitem.find('.num').text();
+                            $thisitem.find('.num').text(parseInt(oldnum) + 1);
+                            return;
+                        }
+                        else {
+                            return;
+                        }
+                    },
+                    error: function(XmlHttprequest, textStatus, errorThrown){
+                        return;
+                    }
+                }
+            );
         });
 
 
 
+        $('.can-score-bad').click(function(){
+            var pid = $(this).attr('id').split('-')[1];
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/score/post/bad/' + pid,
+                    data: {
+                        csrfmiddlewaretoken: get_csrf()
+                    },
+                    dateType: 'json',
+                    async: true,
+                    success: function(data){
+                        console.log(data);
+                        if(data === 1) {
+                            var $thisitem = $('#scorebad-' + pid);
+                            $thisitem.find('.icon').css('background-position', $thisitem.attr('hover_bg_pos'));
+                            var oldnum = $thisitem.find('.num').text();
+                            $thisitem.find('.num').text(parseInt(oldnum) + 1);
+                            return;
+                        }
+                        else {
+                            return;
+                        }
+                    },
+                    error: function(XmlHttprequest, textStatus, errorThrown){
+                        return;
+                    }
+                }
+            );
+        });
+
+
+
+
+
         // change background position
+        /*
         $('.item-button').mouseenter(function(){
             var $icon = $(this).find('.icon');
             var unhover_pos = $icon.css('background-position');
@@ -243,6 +303,7 @@
             }
                                
         );
+       */
 
 
 
@@ -285,37 +346,5 @@
 
 
 
-    function set_good(post_id) {
-        if(post_id == 0) return;
-        $.ajax(
-            {
-                type: 'POST',
-                url: '/score/good/' + post_id,
-                data: {},
-                dateType: 'json',
-                async: true,
-                success: function(data){
-                    if(data == 1) {
-                        window.location.reload();
-                    }
-                    else {
-                        return;
-                    }
-                },
-                error: function(XmlHttprequest, textStatus, errorThrown){
-                    return;
-                }
-            }
-        );
-    }
-
-
-
-
-
-
-
-
-
-
 })(window, jQuery);
+

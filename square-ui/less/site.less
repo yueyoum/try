@@ -250,7 +250,15 @@ body {
     padding: 0;
     width: auto;
     height: auto;
+    cursor: default;
 
+    &.can-score-good {
+        cursor: pointer;
+    }
+
+    &.can-score-bad {
+        cursor: pointer;
+    }
 
     .icon {
         .left;
@@ -262,8 +270,16 @@ body {
             background-position: 0px -20px;
         }
 
+        &.scored-good {
+            background-position: 0px 0px;
+        }
+
         &.bad {
             background-position: 0px -69px;
+        }
+
+        &.scored-bad {
+            background-position: -1px -48px;
         }
 
     }

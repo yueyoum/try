@@ -7,7 +7,8 @@
             <div class="mask"></div>
             <div class="base">
                 <p class="name">
-                    <a href="">{{ item.user.username }}</a> ( 我才哦啊的哦能否奥山的你到能否 )
+                    <a href="">{{ item.user.username }}</a>
+                    {% if item.user.sign %}（{{ item.user.sign }}）{% endif %}
                 </p>
 
                 {% if is_head %}
@@ -64,7 +65,8 @@
                             <div class="mask"></div>
                             <div class="base">
                                 <p class="name">
-                                    <a href="">{{ fork.user.username }}</a> ( 我才哦啊的哦能否奥山的你到能否 )
+                                    <a href="">{{ fork.user.username }}</a>
+                                    {% if fork.user.sign %}（{{ fork.user.sign }}）{% endif %}
                                 </p>
 
                                 <a href="/posts/{{ fork.id }}">

@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from .models import InnerUser
+from .models import InnerUser, SiteUser
 
 
 # 注册，登录，退出等都通过 ajax 的方式进行
@@ -98,5 +98,23 @@ def logout(request):
 
 def account_settings(request):
     return render_to_response('account_settings.html', context_instance=RequestContext(request))
+
+
+
+@inner_accout_guard
+def set_mysign(request):
+    """设置个性签名"""
+    mysign = request.POST.get('mysign', None)
+    if not mysign:
+        raise InnerAccoutError('请填写')
+
+    try:
+        SiteUser.objects.filter(id=request.siteuser.id).update(sign=mysign)
+    except Exception as e:
+        # TODO log e
+        raise InnerAccoutError('error...')
+
+    # done.
+
 
 

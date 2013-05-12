@@ -61,6 +61,8 @@ class SiteUser(models.Model):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
+    sign = models.CharField(max_length=24, blank=True)
+
     username = models.CharField(max_length=32)
     # avatar_url for social user
     avatar_url = models.CharField(max_length=255, blank=True)

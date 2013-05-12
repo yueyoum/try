@@ -21,7 +21,6 @@
 
 
     <link rel="stylesheet" href="{{ STATIC_URL }}square/css/square.css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/project.css" />
     {% block css %}
     {% endblock %}
 </head>
@@ -53,7 +52,7 @@
                 <ul>
                     <li class="link"><a href="">我发布的帖子</a></li>
                     <li class="link"><a href="">我关注的帖子</a></li>
-                    <li class="link"><a href="">帐号设置</a></li>
+                    <li class="link"><a href="account/settings">帐号设置</a></li>
                     <li class="link"><a href="" id="accoutLogout">退出</a></li>
                 </ul>
             {% else %}

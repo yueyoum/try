@@ -9,4 +9,6 @@ urlpatterns = patterns('',
     url(r'account/register/?$', views.register),
     url(r'account/logout/?$', views.logout),
     url(r'account/settings/?$', views.account_settings),
+
+    url(r'account/settings/mysign$', views.set_mysign),
 )

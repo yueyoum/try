@@ -126,6 +126,45 @@
 
 
 
+        // set mysign
+        $('#mySignBtn').click(function(e){
+            e.preventDefault();
+            var mysign = $('#mySign').val();
+            mysign = strip(mysign);
+
+
+            if(mysign.length==0) {
+                return false;
+            }
+
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/account/settings/mysign',
+                    data: {
+                        mysign: mysign,
+                        csrfmiddlewaretoken: get_csrf()
+                    },
+                    dateType: 'json',
+                    async: false,
+                    success: function(data){
+                        if(data.ok) {
+                            make_warning('#mySignWarning', '设置成功');
+                            $('#mySign').val('');
+                        }
+                        else {
+                            make_warning('#loginWaring', data.msg);
+                        }
+                    },
+                    error: function(XmlHttprequest, textStatus, errorThrown){
+                        make_warning('#loginWaring', '发生错误，请稍后再试')
+                    }
+                }
+            );
+        });
+
+
+
 
         // post new head 
         $('#postNewHead').click(function(e){

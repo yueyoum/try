@@ -17,6 +17,7 @@
 
                 <p class="text">{{ item.content }}</p>
                 <p class="time">{{ item.posted_at }}</p>
+                <p class="time">{{ item.child_counts }}</p>
             </div>
             <div class="extra {% if item.post_forks %}fork{% endif %}">
                 <div class="left">
@@ -33,7 +34,7 @@
                 </div>
                 <div class="right">
                     {% if is_head %}
-                    <a href="/posts/{{ item.id }}" class="head-info">{{ item.body_count }} 跟帖</a>
+                    <a href="/posts/{{ item.id }}" class="head-info">{{ item.child_counts }} 跟帖</a>
                     {% else %}
                         {% if item.post_forks %}
                         <button class="button has-fork" fork-id="{{ item.id }}">
@@ -72,10 +73,11 @@
                                 <a href="/posts/{{ fork.id }}">
                                     <p class="text">{{ fork.content }}</p>
                                     <p class="time">{{ fork.posted_at }}</p>
+                                    <p class="time">{{ fork.child_counts }}</p>
                                 </a>
                             </div>
                             <div class="extra">
-                                <div class="">
+                                <div class="left">
                                     <button class="button item-button {% if request.siteuser %}{% if not fork.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ fork.id }}" modal-window-id="login-modal">
                                         <div class="icon good {% if fork.scored_good %}socred-good{% endif %}"></div>
                                         <div class="num">{{ fork.good }}</div>
@@ -87,6 +89,10 @@
                                         <div class="clear"></div>
                                     </button>
                                 </div>
+                                <div class="right">
+                                    <a href="/posts/{{ fork.id }}">{{ fork.child_counts }} 跟帖</a>
+                                </div>
+                                <div class="clear"></div>
                             </div>
                         </div>
                         <div class="clear"></div>

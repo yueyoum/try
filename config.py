@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import redis
 
+
+# Head 后面有多少跟帖后就不再更新 Body 的跟帖数量
+UPDATE_CHILD_COUNT_UNTIL = 1000
+
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = 6379
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import datetime
 import json
 from functools import wraps
@@ -9,11 +10,15 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.db.models import F
+from django.conf import settings
 
-from config import redis_client
+from config import redis_client, UPDATE_CHILD_COUNT_UNTIL
 
 from .models import HeadPost, BodyPost
 
+
+with open(os.path.join(settings.PROJECT_PATH, 'utils', 'set_child_count.lua'), 'r') as f:
+    set_child_count_script = f.read()
 
 
 def post_test(func):
@@ -35,6 +40,16 @@ def _scoring_guard(func):
     return deco
 
 
+def set_post_child_count(posts):
+    pipe = redis_client.pipeline()
+    for p in posts:
+        pipe.hget('childcount', p.id)
+    child_counts = pipe.execute()
+
+    for index, cc in enumerate(child_counts):
+        setattr(posts[index], 'child_counts', int(cc) if cc else 0)
+
+
 def set_post_score_status(pobj, uid):
     if uid:
         setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
@@ -51,7 +66,7 @@ def get_body_lists(uid, start_id, length=20):
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
         set_post_score_status(body, uid)
-        forks = BodyPost.objects.filter(parent_id=start_id).order_by('-good')
+        forks = BodyPost.objects.filter(parent_id=start_id)
         forks_count = forks.count()
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
@@ -62,16 +77,20 @@ def get_body_lists(uid, start_id, length=20):
         if forks_count == 1:
             # 没有分支，只有一个跟帖
             setattr(body, 'post_forks', [])
+            body_forks = forks
         else:
+            # 有多个分支，首先根据跟帖数排序
             body_forks = []
-            for _f in forks[1:]:
+            for _f in forks:
                 set_post_score_status(_f, uid)
                 body_forks.append(_f)
 
-            setattr(body, 'post_forks', body_forks)
+            set_post_child_count(body_forks)
+            body_forks.sort(key=lambda b: b.child_counts, reverse=True)
+            setattr(body, 'post_forks', body_forks[1:])
 
         result.append(body)
-        start_id = forks[0].id
+        start_id = body_forks[0].id
 
     return result
 
@@ -107,6 +126,7 @@ def post_new_head(request):
     )
 
 
+
     url = reverse('show_post', kwargs={'post_id': body.id})
     res = {'ok': True, 'msg': url}
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
@@ -134,7 +154,7 @@ def post_new_body(request):
             res = {'ok': False, 'msg': '非法操作'}
             return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
-        BodyPost.objects.create(
+        new_body = BodyPost.objects.create(
             user=request.siteuser,
             head_id=head_id,
             parent_id = parent_id,
@@ -145,8 +165,18 @@ def post_new_body(request):
         res = {'ok': False, 'msg': '发生错误，待会再试'}
         return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
-    HeadPost.objects.filter(id=head_id).update(body_count=F('body_count')+1,
-                                               updated_at=datetime.datetime.now())
+    # 设置redis中的 parent 和 childcount
+    redis_client.hset('parent', new_body.id, parent_id)
+    head_child_count = redis_client.hget('childcount', head_id)
+    head_child_count = int(head_child_count) if head_child_count else 0
+    if head_child_count < UPDATE_CHILD_COUNT_UNTIL:
+        redis_client.eval(set_child_count_script, 2, 'parent', 'childcount', new_body.id)
+    else:
+        redis_client.hincrby('childcount', head_id, 1)
+
+    #HeadPost.objects.filter(id=head_id).update(body_count=F('body_count')+1,
+                                               #updated_at=datetime.datetime.now())
+    HeadPost.objects.filter(id=head_id).update(updated_at=datetime.datetime.now())
 
 
     url = reverse('show_post', kwargs={'post_id': parent_id})
@@ -163,6 +193,7 @@ def show_post(request, post_id):
     title = HeadPost.objects.get(id=head_id).title
 
     posts = get_body_lists(uid, post_id)
+    set_post_child_count(posts)
 
 
     data = {
@@ -192,7 +223,7 @@ def index(request):
         setattr(p, 'post_forks', False)
         items.append(p)
 
-
+    set_post_child_count(items)
 
     data = {
         'is_head': True,

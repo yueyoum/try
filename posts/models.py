@@ -11,7 +11,6 @@ class HeadPost(models.Model):
     user = models.ForeignKey('siteuser.SiteUser', related_name='head_posts')
     title = models.CharField(max_length=40, db_index=True)
 
-    body_count = models.PositiveIntegerField(default=0, db_index=True)
     updated_at = models.DateTimeField(default=datetime.datetime.now(), db_index=True)
 
 

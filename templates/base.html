@@ -35,8 +35,8 @@
 
 
         <span class="left-group">
-            <a href="/hot/day">今日热门</a>
-            <a href="/hot/week">本周热门</a>
+            <a href="">今日热门</a>
+            <a href="">本周热门</a>
         </span>
         <span class="right-group">
             {% with user=request.siteuser %}
@@ -74,7 +74,7 @@
 </div>
 
 
-<div id="login-modal" class="modal">
+<div id="login-modal" class="modal" auto-close="1">
     <div class="header">
         <span class="title">登录</span>
         <span class="close">关闭</span>
@@ -109,7 +109,7 @@
 
 
 
-<div class="modal" id="register-modal">
+<div class="modal" id="register-modal" auto-close="1">
     <div class="header">
         <span class="title">注册</span>
         <span class="close">关闭</span>

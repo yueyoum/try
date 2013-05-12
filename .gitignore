@@ -4,6 +4,7 @@
 *.rdb
 
 env
-avatar
+static
+project_static/avatar
 .ropeproject
 

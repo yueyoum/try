@@ -1,0 +1,18 @@
+[uwsgi]
+uid = wang
+gid = wang
+chdir = /home/wang/codes/github/try/
+pythonpath = try/
+virtualenv = env/
+env = DJANGO_SETTINGS_MODULE=settings
+module = django.core.handlers.wsgi:WSGIHandler()
+socket = 127.0.0.1:8999
+listen = 2048
+buffer-size = 32768
+max-requests = 2048
+master = true
+workers = 2
+enable-threads = true
+limit-as = 256
+daemonize = run/uwsgi.log
+pidfile = run/uwsgi.pid

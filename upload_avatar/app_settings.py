@@ -5,7 +5,7 @@ from django.conf import settings
 PROJECT_PATH = settings.PROJECT_PATH
 
 
-DEFAULT_AVATAR = 'default.png'
+DEFAULT_AVATAR = 'default_avatar.png'
 
 
 # where the uploaded image store, absolute path

@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    server_name 127.0.0.1;
+    
+    access_log /tmp/try_nginx_access.log;
+    error_log /tmp/try_nginx_error.log;    
+
+    location /static/avatar/ {
+        alias /home/wang/codes/github/try/avatar/;
+    }
+
+    location /static/ {
+        alias /home/wang/codes/github/try/static/;
+    }
+
+    location / {
+        uwsgi_pass 127.0.0.1:8999;
+        include uwsgi_params;
+    }
+
+}

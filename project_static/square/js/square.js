@@ -126,12 +126,12 @@
         var pstyle = navigator.appName === 'Microsoft Internet Explorer' ? 'absolute' : 'fixed';
 
         var _open = function(wid) {
-            /*
-            $('#' + wid).children('.header').children('.close').bind('click', function(){
-                $(this).unbind('click');
-                $('#' + wid).bPopup().close();
-            });
-           */
+            if($('#'+wid).attr('auto-close') === '1') {
+                $('#' + wid).children('.header').children('.close').bind('click', function(){
+                    $(this).unbind('click');
+                    $('#' + wid).bPopup().close();
+                });
+            }
             $('#' + wid).bPopup({
                 followSpeed: 100,
                 opacity: 0.4,

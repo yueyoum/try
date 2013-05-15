@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 
 {% block mainLeft %}
-    {% include "item.html" %}
+
+{% for item in items %}
+    <div class="index-item">
+        <div class="avatar">
+            <a href="">
+            <img src="{{ item.user.avatar }}" alt="" width="48px" height="48px"/>
+            </a>
+        </div>
+        <div class="rightBlock">
+            <p class="name">
+                <a href="">{{ item.user.username }}</a>
+                {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
+            </p>
+            <div class="main">
+                <a href="/posts/{{ item.id }}">
+                    <p class="title">{{ item.title }}</p>
+                    <p class="child-num">{{ item.child_counts }}</p>
+                    <div class="clear"></div>
+                </a>
+            </div>
+            <p class="time">发表于: {{ item.updated_at }} 更新于: {{ item.updated_at }}</p>
+        </div>
+        <div class="clear"></div>
+    </div>
+{% endfor %}
+
 {% endblock %}

@@ -440,11 +440,14 @@ a.button {
   padding: 0;
   line-height: 30px;
 }
-body {
-  background: url(/static/img/bgtile.gif) repeat;
-}
 .none {
   display: none;
+}
+a {
+  color: #01938e;
+}
+a:hover {
+  color: #ff0080;
 }
 .social-list {
   padding-left: 20px;
@@ -503,72 +506,77 @@ body {
   color: #666;
   font-size: 16px;
 }
+.index-item {
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+.index-item .avatar {
+  float: left;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+}
+.index-item .rightBlock {
+  margin-left: 50px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #777;
+}
+.index-item .rightBlock p {
+  margin: 4px 0;
+}
+.index-item .rightBlock .main {
+  font-size: 18px;
+}
+.index-item .rightBlock .main p {
+  margin: 12px 0;
+}
+.index-item .rightBlock .main .title {
+  float: left;
+  width: 520px;
+}
+.index-item .rightBlock .main .child-num {
+  float: right;
+}
 .list-view {
-  width: 100%;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  position: relative;
+}
+.list-view .item-line {
+  position: absolute;
+  width: 4px;
+  top: 0;
+  left: 22px;
+  background-color: #eee;
+  z-index: -1;
+}
+.list-view .item-line.fork {
+  background-color: #01938e;
 }
 .list-view .avatar {
   float: left;
-  padding: 6px;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   overflow: hidden;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #eeeeee;
-  border-left: 1px solid #eeeeee;
-  background-color: #fff;
 }
 .list-view .content {
-  float: left;
-  width: 603px;
-  border: 1px solid #eeeeee;
-  border-bottom: none;
-  margin-bottom: 10px;
-  position: relative;
-  background-color: #fff;
-  -moz-box-shadow: 0px 5px 5px -2px #aaaaaa;
-  -webkit-box-shadow: 0px 5px 5px -2px #aaaaaa;
-  box-shadow: 0px 5px 5px -2px #aaaaaa;
+  margin: 0 0 20px 60px;
 }
-.list-view .content a {
-  color: #01938e;
-  padding: 2px 4px;
-}
-.list-view .content a:hover {
-  color: #ffffff;
-  background-color: #ff0080;
-}
-.list-view .content div.mask {
-  width: 10px;
-  height: 54px;
-  position: absolute;
-  top: 0;
-  left: -1px;
-  background-color: #fff;
-}
-.list-view .content div.base {
-  padding: 10px 20px;
-}
-.list-view .content div.base p {
-  width: 100%;
+.list-view .content p {
   margin: 0;
   color: #7e7e7e;
   font-size: 12px;
 }
-.list-view .content div.base p.title {
-  font-size: 14px;
-  font-weight: bold;
-  margin-top: 10px;
+.list-view .content p.name {
+  background-color: #F0F6F3;
+  line-height: 22px;
 }
-.list-view .content div.base p.text {
-  font-size: 16px;
+.list-view .content p.text {
+  font-size: 14px;
   color: #000000;
   margin: 15px 0;
-}
-.list-view .content div.extra {
-  background-color: #DCDCDC;
-  padding: 10px 20px;
-  line-height: 20px;
 }
 .list-view .content div.extra button {
   color: #337FA3;
@@ -580,32 +588,32 @@ body {
 .list-view .content div.extra.fork button {
   color: #ffffff;
 }
+.list-view .content div.extra .list-view-action {
+  display: none;
+}
 .list-view .forksarea {
-  width: 605px;
-  margin-left: 55px;
+  margin-left: 60px;
 }
 .list-view .forksarea .fork-view {
-  margin: 0 0 10px 0;
+  position: relative;
+}
+.list-view .forksarea .fork-view .fork-line {
+  position: absolute;
+  top: 14px;
+  left: -38px;
+  width: 38px;
+  height: 4px;
+  background-color: #01938e;
 }
 .list-view .forksarea .fork-view .avatar {
-  padding: 6px;
   width: 32px;
   height: 32px;
 }
 .list-view .forksarea .fork-view .content {
-  width: 558px;
+  margin-left: 50px;
 }
-.list-view .forksarea .fork-view .content div.mask {
-  height: 44px;
-}
-.list-view .forksarea .fork-view .content div.base a {
-  padding: 0;
-}
-.list-view .forksarea .fork-view .content div.base p.text {
-  font-size: 14px;
-}
-.list-view .forksarea .fork-view .content div.extra {
-  padding: 5px 16px;
+.list-view .forksarea .fork-view .content p.text {
+  color: #666;
 }
 .item-button {
   margin: 0 10px 0 0;

@@ -1,24 +1,21 @@
 {% for item in items %}
 <div class="list-view" id="listview{{ item.id }}">
         <div class="avatar">
-            <img src="{{ item.user.avatar }}" alt="" width="42px" height="42px"/>
+            <a href="">
+            <img src="{{ item.user.avatar }}" alt="" width="48px" height="48px"/>
+            </a>
         </div>
+        <div class="item-line {% if item.post_forks %}fork{% endif %}"></div>
         <div class="content">
-            <div class="mask"></div>
-            <div class="base">
-                <p class="name">
-                    <a href="">{{ item.user.username }}</a>
-                    {% if item.user.sign %}（{{ item.user.sign }}）{% endif %}
-                </p>
+            <p class="name">
+                <a href="">{{ item.user.username }}</a>
+                {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
+            </p>
 
-                {% if is_head %}
-                <p class="title"><a href="{% url 'show_post' post_id=item.id %}">{{ item.title }}</a></p>
-                {% endif %}
+            <p class="text">{{ item.content }}</p>
+            <p class="time">{{ item.posted_at }}</p>
 
-                <p class="text">{{ item.content }}</p>
-                <p class="time">{{ item.posted_at }}</p>
-            </div>
-            <div class="extra {% if item.post_forks %}fork{% endif %}">
+            <div class="extra">
                 <div class="left">
                     <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}" modal-window-id="login-modal">
                         <div class="icon good {% if item.scored_good %}scored-good{% endif %}"></div>
@@ -31,23 +28,19 @@
                         <div class="clear"></div>
                     </button>
                 </div>
-                <div class="right">
-                    {% if is_head %}
-                    <a href="/posts/{{ item.id }}" class="head-info">{{ item.child_counts }} 跟帖</a>
-                    {% else %}
-                        {% if item.post_forks %}
-                        <button class="button has-fork" fork-id="{{ item.id }}">
-                            <div class="icon"></div>
-                            <div class="text">收起分支</div>
-                            <div class="clear"></div>
-                        </button>
-                        {% endif %}
-                        <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.head }} parent-id={{ item.id }} >
-                            <div class="icon"></div>
-                            <div class="text">写后续</div>
-                            <div class="clear"></div>
-                        </button>
+                <div class="right list-view-action">
+                    {% if item.post_forks %}
+                    <button class="button has-fork" fork-id="{{ item.id }}">
+                        <div class="icon"></div>
+                        <div class="text">收起分支</div>
+                        <div class="clear"></div>
+                    </button>
                     {% endif %}
+                    <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.head }} parent-id={{ item.id }} >
+                        <div class="icon"></div>
+                        <div class="text">写后续</div>
+                        <div class="clear"></div>
+                    </button>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -59,39 +52,24 @@
                 {% for fork in item.post_forks %}
                 <div class="fork-view" id="forkview{{ fork.id }}">
                         <div class="avatar">
+                            <a href="">
                             <img src="{{ fork.user.avatar }}" alt="" width="32px" height="32px"/>
+                            </a>
                         </div>
+                        <div class="fork-line"></div>
                         <div class="content">
-                            <div class="mask"></div>
-                            <div class="base">
-                                <p class="name">
-                                    <a href="">{{ fork.user.username }}</a>
-                                    {% if fork.user.sign %}（{{ fork.user.sign }}）{% endif %}
-                                </p>
+                            <p class="name">
+                                <a href="">{{ fork.user.username }}</a>
+                                {% if fork.user.sign %}( {{ fork.user.sign }} ){% endif %}
+                                <span class="right">
+                                <a href="/posts/{{ fork.id }}">{{ fork.child_counts }} 跟帖</a>
+                                </span>
+                            </p>
 
-                                <a href="/posts/{{ fork.id }}">
-                                    <p class="text">{{ fork.content }}</p>
-                                    <p class="time">{{ fork.posted_at }}</p>
-                                </a>
-                            </div>
-                            <div class="extra">
-                                <div class="left">
-                                    <button class="button item-button {% if request.siteuser %}{% if not fork.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ fork.id }}" modal-window-id="login-modal">
-                                        <div class="icon good {% if fork.scored_good %}socred-good{% endif %}"></div>
-                                        <div class="num">{{ fork.good }}</div>
-                                        <div class="clear"></div>
-                                    </button>
-                                    <button class="button item-button {% if request.siteuser %}{% if not fork.scored %}can-score-bad{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ fork.id }}" modal-window-id="login-modal">
-                                        <div class="icon bad {% if fork.socred_bad %}socred-bad{% endif %}"></div>
-                                        <div class="num">{{ fork.bad }}</div>
-                                        <div class="clear"></div>
-                                    </button>
-                                </div>
-                                <div class="right">
-                                    <a href="/posts/{{ fork.id }}">{{ fork.child_counts }} 跟帖</a>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
+                            <a href="/posts/{{ fork.id }}">
+                                <p class="text">{{ fork.content }}</p>
+                                <p class="time">{{ fork.posted_at }}</p>
+                            </a>
                         </div>
                         <div class="clear"></div>
                     </div>

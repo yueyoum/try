@@ -1,5 +1,5 @@
 MySQL-python
 Django==1.5.0
-PIL
+Pillow
 redis
 hiredis

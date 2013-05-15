@@ -347,6 +347,15 @@
 
 
 
+        // list-view-action
+        $('.list-view .content').mouseenter(function(){
+            $(this).find('.list-view-action').show();
+        }).mouseleave(function(){
+            $(this).find('.list-view-action').hide();
+        })
+
+
+
         // toggle forks area
         $('.has-fork').click(function(){
             var fid, show;
@@ -361,6 +370,12 @@
                 $(this).find('.text').text('打开分支');
             }
         });
+
+
+        // fork-line-var height
+        $('.list-view').each(function(index, obj){
+            $(obj).find('.item-line').css('height', $(obj).height() + 20);
+        })
 
 
 

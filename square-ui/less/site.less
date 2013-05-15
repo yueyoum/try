@@ -1,10 +1,21 @@
 body {
-    background: url(/static/img/bgtile.gif) repeat;
+    //background: url(/static/img/bgtile.gif) repeat;
+    //background-color: #f9f9f9;
 }
 
 .none {
     display: none;
 }
+
+
+        a {
+            color: @cyanDark;
+            &:hover {
+                color: @magenta;
+            }
+        }
+
+
 
 .social-list {
     padding-left: 20px;
@@ -90,105 +101,103 @@ body {
 }
 
 
-@listViewBorderColor:   #eee;
-@avatarPadding:     6px;
-@avatarWidth:       42px;
-@contentWidth:      @siteLeftWidth - @avatarWidth - @avatarPadding*2 - 1px - 2px;
-@forkMarginLeft:    @avatarWidth + @avatarPadding*2 + 1px;
+.index-item {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    .avatar {
+        .left;
+        width: 48px;
+        height: 48px;
+        overflow: hidden;
+    }
+
+    .rightBlock {
+        margin-left: 50px;
+        padding: 0 10px;
+
+        font-size: 12px;
+        color: #777;
+
+        p {
+            margin: 4px 0;
+        }
 
 
-.shadowed-box (@bx: 0px, @by: 5px, @bblur: 5px, @bs: -2px) {
-    -moz-box-shadow: @bx @by @bblur @bs #aaa;
-    -webkit-box-shadow: @bx @by @bblur @bs #aaa;
-    box-shadow: @bx @by @bblur @bs #aaa;
+        .main {
+            font-size: 18px;
+
+            p {
+                margin: 12px 0;
+            }
+
+            .title {
+                .left;
+                width: 520px;
+            }
+
+            .child-num {
+                .right;
+            }
+
+        }
+
+    }
 }
 
-.shadowed-box-inner (@bx: 0px, @by: 5px, @bblur: 5px, @bs: -2px) {
-    -moz-box-shadow:inset @bx @by @bblur @bs #aaa;
-    -webkit-box-shadow:inset @bx @by @bblur @bs #aaa;
-    box-shadow:inset @bx @by @bblur @bs #aaa;
-}
+
+
+
+
 
 .list-view {
-    width: 100%;
-    //margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    position: relative;
+
+    .item-line {
+        position: absolute;
+        width: 4px;
+        top: 0;
+        left: 22px;
+        background-color: #eee;
+        z-index: -1;
+
+        &.fork {
+            background-color: @cyanDark;
+        }
+    }
 
     .avatar {
         float: left;
-        padding: @avatarPadding;
-        width: @avatarWidth;
-        height: @avatarWidth;
+        width: 48px;
+        height: 48px;
         overflow: hidden;
-        border-top: 1px solid @listViewBorderColor;
-        border-bottom: 1px solid @listViewBorderColor;
-        border-left: 1px solid @listViewBorderColor;
-        background-color: #fff;
     }
 
     .content {
-        float: left;
-        width: @contentWidth;
-        border: 1px solid @listViewBorderColor;
-        border-bottom: none;
-        margin-bottom: 10px;
-        position: relative;
-        background-color: #fff;
-        .shadowed-box;
-
-
-        a {
-            color: @cyanDark;
-            padding: 2px 4px;
-        }
-
-        a:hover {
-            color: @white;
-            background-color: @magenta;
-        }
-
-        div.mask {
-            width: 10px;
-            height: @avatarWidth + @avatarPadding * 2;
-            position: absolute;
-            top: 0;
-            left: -1px;
-            background-color: #fff;
-        }
-
-        div.base {
-            padding: 10px 20px;
+        margin: 0 0 20px 60px;
 
             p {
-                width: 100%;
                 margin: 0;
-                //overflow: hidden;
                 color: @gray;
                 font-size: 12px;
 
-                &.title {
-                    font-size: 14px;
-                    font-weight: bold;
-                    margin-top: 10px;
+                &.name {
+                    background-color: #F0F6F3;
+                    line-height: 22px;
                 }
 
+
                 &.text {
-                    font-size: 16px;
+                    font-size: 14px;
                     color: @black;
                     margin: 15px 0;
                 }
-
-                &.time {
-                }
-
             }
-        }
 
         div.extra {
-            background-color: #DCDCDC;
-            padding: 10px 20px;
-            line-height: 20px;
-
             button {
                 color: #337FA3;
                 background: none;
@@ -200,44 +209,41 @@ body {
                     color: @white;
                 }
             }
+
+            .list-view-action {
+                display: none;
+            }
         }
     }
 
 
     .forksarea {
-        width: @siteLeftWidth - @forkMarginLeft;
-        margin-left: @forkMarginLeft;
-        //display: none;
+        margin-left: 60px;
 
         .fork-view {
-            margin: 0 0 10px 0;
+            position: relative;
+            .fork-line {
+                position: absolute;
+                top: 14px;
+                left: -38px;
+                width: 38px;
+                height: 4px;
+                background-color: @cyanDark;
+            }
+
+
             .avatar {
-                padding: @avatarPadding;
-                width: @avatarWidth - 10px;
-                height: @avatarWidth - 10px;
+                width: 32px;
+                height: 32px;
             }
 
             .content {
-                width: @contentWidth - @forkMarginLeft + 10px;
+                margin-left: 50px;
 
-                div.mask {
-                    height: @avatarWidth - 10px + @avatarPadding * 2;
+                p.text {
+                    color: #666;
                 }
 
-                div.base {
-                    a {
-                        padding: 0;
-                    }
-
-                    p.text {
-                        font-size: 14px;
-                    }
-                
-                }
-
-                div.extra {
-                    padding: 5px 16px;
-                }
             }
 
         }

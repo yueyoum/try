@@ -506,6 +506,13 @@ a:hover {
   color: #666;
   font-size: 16px;
 }
+#postPageBottom {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed #2d89ef;
+}
 .index-item {
   padding-bottom: 10px;
   margin-bottom: 20px;
@@ -513,9 +520,25 @@ a:hover {
 }
 .index-item .avatar {
   float: left;
-  width: 48px;
-  height: 48px;
-  overflow: hidden;
+  /*
+        width: 48px;
+        height: 48px;
+        overflow: hidden;
+        */
+
+}
+.index-item .avatar img {
+  border: none 0px #000000;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
+}
+.index-item .avatar img.bigger {
+  transform: scale(1.3, 1.3);
+  -webkit-transform: scale(1.3, 1.3);
+  -moz-transform: scale(1.3, 1.3);
+  -o-transform: scale(1.3, 1.3);
+  -ms-transform: scale(1.3, 1.3);
 }
 .index-item .rightBlock {
   margin-left: 50px;
@@ -530,7 +553,7 @@ a:hover {
   font-size: 18px;
 }
 .index-item .rightBlock .main p {
-  margin: 12px 0;
+  margin: 10px 0;
 }
 .index-item .rightBlock .main .title {
   float: left;
@@ -553,13 +576,29 @@ a:hover {
   z-index: -1;
 }
 .list-view .item-line.fork {
-  background-color: #01938e;
+  background-color: #74b1f4;
 }
 .list-view .avatar {
   float: left;
-  width: 48px;
-  height: 48px;
-  overflow: hidden;
+  /*
+        width: 48px;
+        height: 48px;
+        overflow: hidden;
+        */
+
+}
+.list-view .avatar img {
+  border: none 0px #000000;
+  -moz-border-radius: 30px;
+  -webkit-border-radius: 30px;
+  border-radius: 30px;
+}
+.list-view .avatar img.bigger {
+  transform: scale(1.3, 1.3);
+  -webkit-transform: scale(1.3, 1.3);
+  -moz-transform: scale(1.3, 1.3);
+  -o-transform: scale(1.3, 1.3);
+  -ms-transform: scale(1.3, 1.3);
 }
 .list-view .content {
   margin: 0 0 20px 60px;
@@ -603,7 +642,8 @@ a:hover {
   left: -38px;
   width: 38px;
   height: 4px;
-  background-color: #01938e;
+  background-color: #74b1f4;
+  z-index: -1;
 }
 .list-view .forksarea .fork-view .avatar {
   width: 32px;

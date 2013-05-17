@@ -357,10 +357,15 @@
 
 
         // toggle forks area
+        /*
         $('.has-fork').click(function(){
-            var fid, show;
+            var fid, show, $pa, $item_line;
             fid = $(this).attr('fork-id');
             show = $('#forksarea' + fid).attr('show');
+            $pa = $(this).parent().parent().parent().parent();
+            $item_line = $pa.find('.item-line');
+            console.log($pa.height());
+
             if(show === '0') {
                 $('#forksarea' + fid).attr('show', '1').slideDown(200);
                 $(this).find('.text').text('收起分支');
@@ -369,6 +374,19 @@
                 $('#forksarea' + fid).attr('show', '0').slideUp(200);
                 $(this).find('.text').text('打开分支');
             }
+            $item_line.css('height', $('.has-fork').parent().parent().parent().parent().height());
+        });
+       */
+        var forkingitems = [];
+        $('.has-fork').each(function(index, obj){
+            forkingitems.push(
+                new ForkingListItem( $(this), $(this).attr('fork-id') )
+            );
+
+            $(this).unbind('click');
+            $(this).bind('click', function(){
+                forkingitems[index].toggle();
+            });
         });
 
 
@@ -377,6 +395,18 @@
             $(obj).find('.item-line').css('height', $(obj).height() + 20);
         })
 
+
+        $('.content').mouseover(function(){
+            $(this).parent().find('.avatar img').first().addClass('bigger');
+        }).mouseout(function(){
+            $(this).parent().find('.avatar img').first().removeClass('bigger');
+        });
+
+        $('.index-item').mouseover(function(){
+            $(this).find('.avatar img').first().addClass('bigger');
+        }).mouseout(function(){
+            $(this).find('.avatar img').first().removeClass('bigger');
+        });
 
 
 
@@ -396,6 +426,44 @@
         $(obj).text(text);
         $(obj).show(100);
     }
+
+
+    var ForkingListItem = (function(){
+        function ForkingListItem(obj, fid) {
+            this.obj = obj;
+            this.fid = fid;
+            this.pa = this.obj.parent().parent().parent().parent();
+            this.max_height = this.pa.height() + 20;
+            this.min_height = this.pa.find('.content').first().height() + 40;
+            this.item_line = this.pa.find('.item-line');
+        }
+
+        ForkingListItem.prototype.upit = function() {
+            $('#forksarea' + this.fid).attr('show', '0').slideUp(200);
+            this.obj.find('.text').text('打开分支');
+            this.item_line.css('height', this.min_height);
+        }
+
+        ForkingListItem.prototype.downit = function() {
+            $('#forksarea' + this.fid).attr('show', '1').slideDown(200);
+            this.obj.find('.text').text('收起分支');
+            this.item_line.css('height', this.max_height);
+        }
+
+        ForkingListItem.prototype.toggle = function() {
+            var show = $('#forksarea' + this.fid).attr('show');
+            if(show === '1') {
+                this.upit();
+            }
+            else {
+                this.downit();
+            }
+            
+        }
+
+        return ForkingListItem;
+    
+    })();
 
 
 

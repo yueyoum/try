@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import datetime
 import json
 from functools import wraps
@@ -10,15 +9,12 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.conf import settings
 
 from config import redis_client, UPDATE_CHILD_COUNT_UNTIL
 
 from .models import HeadPost, BodyPost
 
 
-with open(os.path.join(settings.PROJECT_PATH, 'utils', 'set_child_count.lua'), 'r') as f:
-    set_child_count_script = f.read()
 
 
 def post_test(func):
@@ -72,7 +68,7 @@ def get_body_lists(uid, start_id, length=20):
             # 到这里就结束了，后面没有跟帖了
             setattr(body, 'post_forks', [])
             result.append(body)
-            break
+            return result
 
         if forks_count == 1:
             # 没有分支，只有一个跟帖
@@ -170,7 +166,7 @@ def post_new_body(request):
     head_child_count = redis_client.hget('childcount', head_id)
     head_child_count = int(head_child_count) if head_child_count else 0
     if head_child_count < UPDATE_CHILD_COUNT_UNTIL:
-        redis_client.eval(set_child_count_script, 2, 'parent', 'childcount', new_body.id)
+        redis_client.doeval('set_child_count', 2, 'parent', 'childcount', new_body.id)
     else:
         redis_client.hincrby('childcount', head_id, 1)
 
@@ -201,6 +197,8 @@ def show_post(request, post_id):
         'title': title,
         'head_id': head_id,
         'items': posts,
+        'next_start_id': posts[-1].id,
+        'next_body_counts': posts[-1].child_counts,
     }
     return render_to_response(
         'show_post.html',
@@ -245,7 +243,6 @@ def index(request):
 class PostScoring(object):
     def __init__(self, redis_client):
         self.r = redis_client
-        print 'PostScoring init'
 
     def has_scored(self, uid, pid):
         if self.r.sismember('good.{0}'.format(uid), pid):

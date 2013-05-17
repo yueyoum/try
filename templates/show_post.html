@@ -3,4 +3,11 @@
 {% block mainLeft %}
 <h2 class="title"><a href="/posts/{{ head_id }}">{{ title }}</a></h2>
     {% include "item.html" %}
+    <div id="postPageBottom">
+        {% if next_body_counts %}
+        <a class="next-post-page" href="/posts/{{ next_start_id }}">后续 {{ next_body_counts }} 跟帖</a>
+        {% else %}
+        后续无跟帖，返回 <a href="/posts/{{ head_id }}">故事开头</a> 
+        {% endif %}
+    </div>
 {% endblock %}

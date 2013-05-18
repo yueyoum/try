@@ -223,11 +223,6 @@
 .border-color-grayDark {
   border-color: #585858 !important;
 }
-body {
-  font-size: 14px;
-  padding: 0;
-  margin: 0;
-}
 a {
   text-decoration: none;
 }
@@ -256,94 +251,91 @@ ul li {
 .clear {
   clear: both;
 }
-#main {
-  width: 980px;
-  margin: 60px auto;
-}
 #nav-bar {
-  background-color: #2d89ef;
-  position: fixed;
-  top: 0;
-  left: 0;
+  background: url('/static/img/header_weave.png');
   width: 100%;
-  display: block;
   margin: 0;
   padding: 0;
-  z-index: 1000;
+  height: 120px;
 }
 #nav-bar .nav-bar-inner {
   width: 980px;
   margin: 0 auto;
-  line-height: 42px;
 }
-#nav-bar .nav-bar-inner a {
+#nav-bar .nav-bar-inner div.logo {
+  float: left;
+  height: 120px;
+  width: 120px;
+}
+#nav-bar .nav-bar-inner div.logo img {
+  width: 120px;
+  height: 120px;
+}
+#nav-bar .nav-bar-inner div.menus {
+  margin-left: 130px;
+}
+#nav-bar .nav-bar-inner div.menus .upper {
+  font-size: 40px;
+  padding: 10px 0 0 0;
+  word-spacing: 60px;
+}
+#nav-bar .nav-bar-inner div.menus .upper a {
+  color: #000000;
+}
+#nav-bar .nav-bar-inner div.menus .bottom {
+  height: 42px;
+  line-height: 42px;
+  background-color: #2d89ef;
+  margin-top: 20px;
+}
+#nav-bar .nav-bar-inner div.menus .bottom a {
   float: left;
   display: block;
   color: #ffffff;
   padding: 0 20px;
   font-size: 16px;
 }
-#nav-bar .nav-bar-inner a.dropdown {
-  /*
-                line-height: 30px;
-                padding-bottom: 6px;
-                border-top: 6px solid @pink;
-                */
-
-}
-#nav-bar .nav-bar-inner a.last {
+#nav-bar .nav-bar-inner div.menus .bottom a.last {
   padding-right: 0;
 }
-#nav-bar .nav-bar-inner a.highlight {
+#nav-bar .nav-bar-inner div.menus .bottom a.highlight {
   background-color: #ff0080;
 }
-#nav-bar .nav-bar-inner a img {
+#nav-bar .nav-bar-inner div.menus .bottom a img {
   float: left;
   height: 42px;
   display: inline;
   margin: 0 10px 0 0;
 }
-#nav-bar .nav-bar-inner a img.right {
+#nav-bar .nav-bar-inner div.menus .bottom a img.right {
   float: right;
   margin: 0 0 0 10px;
 }
-#nav-bar .nav-bar-inner span.logo {
+#nav-bar .nav-bar-inner div.menus .bottom .left-group {
   float: left;
-  display: block;
-  background-color: #74b1f4;
+  margin-right: 280px;
 }
-#nav-bar .nav-bar-inner span.logo a {
-  font-size: 20px;
-  font-weight: bold;
-}
-#nav-bar .nav-bar-inner span.left-group {
-  float: left;
-}
-#nav-bar .nav-bar-inner span.right-group {
-  float: right;
-  text-align: right;
-}
-#nav-bar .nav-bar-inner span ul {
+#nav-bar .nav-bar-inner div.menus .bottom ul {
   display: none;
   position: absolute;
 }
-#nav-bar .nav-bar-inner span ul li {
+#nav-bar .nav-bar-inner div.menus .bottom ul li {
   background-color: #2d89ef;
   padding: 10px;
   border-bottom: 1px solid #0f63c1;
   line-height: 14px;
 }
-#nav-bar .nav-bar-inner span ul li a {
+#nav-bar .nav-bar-inner div.menus .bottom ul li a {
   float: none;
   font-size: 14px;
   display: inline;
   text-decoration: underline;
   padding: 0 2px;
 }
-#nav-bar .nav-bar-inner span ul li.link {
+#nav-bar .nav-bar-inner div.menus .bottom ul li.link {
   padding: 0;
 }
-#nav-bar .nav-bar-inner span ul li.link a {
+#nav-bar .nav-bar-inner div.menus .bottom ul li.link a {
   padding: 12px 22px;
   display: block;
   text-decoration: none;
@@ -440,6 +432,17 @@ a.button {
   padding: 0;
   line-height: 30px;
 }
+body {
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  background: url(/static/img/bg_weave.png) repeat;
+  letter-spacing: 1px;
+}
+#main {
+  width: 980px;
+  margin: 30px auto;
+}
 .none {
   display: none;
 }
@@ -471,29 +474,49 @@ a:hover {
 }
 #mainLeft {
   float: left;
-  width: 660px;
+  width: 640px;
+  background-color: #ffffff;
+  padding: 10px;
 }
 #mainRight {
   float: right;
   width: 300px;
-  background: gray;
-  height: 500px;
+  color: #666;
+}
+#mainRight .box {
+  width: 280px;
+  padding: 10px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+}
+#mainRight .box .header {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+#mainRight .box .header .bigger {
+  font-size: 26px;
+  color: #444;
+}
+#mainRight .box .header .login {
+  color: #ff0080;
+  cursor: pointer;
 }
 .input-control.vertical label {
   display: block;
-  width: 562px;
+  width: 542px;
   padding: 4px 10px;
   text-align: left;
 }
 .input-control.vertical input {
-  width: 560px;
+  width: 540px;
   background-color: #ffffff;
   color: #000000;
   font-size: 16px;
   padding: 4px 10px;
 }
 .input-control.vertical textarea {
-  width: 560px;
+  width: 540px;
   height: 150px;
   resize: vertical;
   color: #000000;
@@ -501,7 +524,7 @@ a:hover {
   padding: 10px;
 }
 #postbody-modal .oldtext {
-  width: 560px;
+  width: 540px;
   padding: 10px;
   color: #666;
   font-size: 16px;
@@ -520,12 +543,6 @@ a:hover {
 }
 .index-item .avatar {
   float: left;
-  /*
-        width: 48px;
-        height: 48px;
-        overflow: hidden;
-        */
-
 }
 .index-item .avatar img {
   border: none 0px #000000;
@@ -534,11 +551,11 @@ a:hover {
   border-radius: 30px;
 }
 .index-item .avatar img.bigger {
-  transform: scale(1.3, 1.3);
-  -webkit-transform: scale(1.3, 1.3);
-  -moz-transform: scale(1.3, 1.3);
-  -o-transform: scale(1.3, 1.3);
-  -ms-transform: scale(1.3, 1.3);
+  transform: scale(1.25, 1.25);
+  -webkit-transform: scale(1.25, 1.25);
+  -moz-transform: scale(1.25, 1.25);
+  -o-transform: scale(1.25, 1.25);
+  -ms-transform: scale(1.25, 1.25);
 }
 .index-item .rightBlock {
   margin-left: 50px;
@@ -573,19 +590,16 @@ a:hover {
   top: 0;
   left: 22px;
   background-color: #eee;
-  z-index: -1;
+  z-index: 1;
 }
 .list-view .item-line.fork {
   background-color: #74b1f4;
 }
 .list-view .avatar {
-  float: left;
-  /*
-        width: 48px;
-        height: 48px;
-        overflow: hidden;
-        */
-
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
 }
 .list-view .avatar img {
   border: none 0px #000000;
@@ -594,11 +608,11 @@ a:hover {
   border-radius: 30px;
 }
 .list-view .avatar img.bigger {
-  transform: scale(1.3, 1.3);
-  -webkit-transform: scale(1.3, 1.3);
-  -moz-transform: scale(1.3, 1.3);
-  -o-transform: scale(1.3, 1.3);
-  -ms-transform: scale(1.3, 1.3);
+  transform: scale(1.25, 1.25);
+  -webkit-transform: scale(1.25, 1.25);
+  -moz-transform: scale(1.25, 1.25);
+  -o-transform: scale(1.25, 1.25);
+  -ms-transform: scale(1.25, 1.25);
 }
 .list-view .content {
   margin: 0 0 20px 60px;
@@ -610,7 +624,6 @@ a:hover {
 }
 .list-view .content p.name {
   background-color: #F0F6F3;
-  line-height: 22px;
 }
 .list-view .content p.text {
   font-size: 14px;
@@ -643,7 +656,7 @@ a:hover {
   width: 38px;
   height: 4px;
   background-color: #74b1f4;
-  z-index: -1;
+  z-index: 1;
 }
 .list-view .forksarea .fork-view .avatar {
   width: 32px;

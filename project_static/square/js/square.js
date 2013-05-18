@@ -1,7 +1,7 @@
 (function(window, $){
     $(function(){
         var dropdowns = [];
-        $('#nav-bar a.dropdown').each(function(index, obj){
+        $('#nav-bar .dropdown').each(function(index, obj){
             dropdowns.push(
                 new NavDorpDown($(obj).next())
             );

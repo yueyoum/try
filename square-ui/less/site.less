@@ -1,7 +1,21 @@
 body {
-    //background: url(/static/img/bgtile.gif) repeat;
-    //background-color: #f9f9f9;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    background: url(/static/img/bg_weave.png) repeat;
+    letter-spacing: 1px;
 }
+
+
+
+#main {
+    width: @mainWidth;
+    margin: 30px auto;
+}
+
+
+
+
 
 .none {
     display: none;
@@ -49,7 +63,7 @@ body {
     border-radius: @r;
 }
 
-.scaleit (@s: 1.3) {
+.scaleit (@s: 1.25) {
     transform: scale(@s, @s);
     -webkit-transform: scale(@s, @s);
     -moz-transform: scale(@s, @s);
@@ -63,21 +77,49 @@ body {
 @siteMainWidth:  unit(@mainWidth);
 @siteRightWidth:  300;
 
-@siteLeftWidth: @siteMainWidth - @siteRightWidth - 20;
+@siteLeftWidth: @siteMainWidth - @siteRightWidth - 40;
 
 @shrink:    100px;
 
 #mainLeft {
     float: left;
     width: unit(@siteLeftWidth, px);
+    background-color: @white;
+    padding: 10px;
 }
+
 
 #mainRight {
     float: right;
     width: unit(@siteRightWidth, px);
-    background: gray;
-    height: 500px;
+    color: #666;
+
+    .box {
+        width: 280px;
+        padding: 10px;
+        background-color: @white;
+        margin-bottom: 20px;
+        .header {
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+
+            .bigger {
+                font-size: 26px;
+                color: #444;
+            }
+
+            .login {
+                color: @magenta;
+                cursor: pointer;
+            }
+        }
+
+    }
+
 }
+
+
 
 
 .input-control.vertical {
@@ -136,11 +178,6 @@ body {
 
     .avatar {
         .left;
-        /*
-        width: 48px;
-        height: 48px;
-        overflow: hidden;
-        */
 
         img {
             .roundit;
@@ -200,7 +237,7 @@ body {
         top: 0;
         left: 22px;
         background-color: #eee;
-        z-index: -1;
+        z-index: 1;
 
         &.fork {
             background-color: @forkLineColor;
@@ -208,12 +245,10 @@ body {
     }
 
     .avatar {
-        float: left;
-        /*
-        width: 48px;
-        height: 48px;
-        overflow: hidden;
-        */
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: 100;
 
         img {
             .roundit;
@@ -234,7 +269,7 @@ body {
 
                 &.name {
                     background-color: #F0F6F3;
-                    line-height: 22px;
+                    //line-height: 22px;
                 }
 
 
@@ -277,7 +312,7 @@ body {
                 width: 38px;
                 height: 4px;
                 background-color: @forkLineColor;
-                z-index: -1;
+                z-index: 1;
             }
 
 

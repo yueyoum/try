@@ -1,104 +1,120 @@
 #nav-bar {
-    background-color: @blue;
-    position: fixed;
-    top: 0;
-    left: 0;
+    background: url('/static/img/header_weave.png');
     width: 100%;
-    display: block;
     margin: 0;
     padding: 0;
-    z-index: 1000;
+    height: 120px;
 
     .nav-bar-inner {
         width: @mainWidth;
         margin: 0 auto;
-        line-height: 42px;
 
-        a {
+
+        div.logo {
             .left;
-            display: block;
-            color: @white;
-            padding: 0 20px;
-            font-size: 16px;
-
-            &.dropdown {
-                /*
-                line-height: 30px;
-                padding-bottom: 6px;
-                border-top: 6px solid @pink;
-                */
-            }
-
-            &.last {
-                padding-right: 0;
-            }
-
-            &.highlight {
-                background-color: @magenta;
-            }
+            height: 120px;
+            width: 120px;
 
             img {
-                float: left;
-                height: 42px;
-                display: inline;
-                margin: 0 10px 0 0;
+                width: 120px;
+                height: 120px;
+            }
+        }
 
-                &.right {
-                    float: right;
-                    margin: 0 0 0 10px;
+
+        div.menus {
+            margin-left: 130px;
+            .upper {
+                font-size: 40px;
+                padding: 10px 0 0 0;
+                word-spacing: 60px;
+                a {
+                    color: @black;
                 }
             }
-        }
 
-        span.logo {
-            .left;
-            display: block;
-            background-color: @blueLight;
-            a {
-                font-size: 20px;
-                font-weight: bold;
-            }
-        }
+            .bottom {
+                height: 42px;
+                line-height: 42px;
+                background-color: @blue;
+                margin-top: 20px;
 
-        span {
-            &.left-group {
-                .left;
-            }
+                a {
+                    .left;
+                    display: block;
+                    color: @white;
+                    padding: 0 20px;
+                    font-size: 16px;
 
-            &.right-group {
-                .right;
-                text-align: right;
-            }
-
-            ul {
-                display: none;
-                position: absolute;
-                li {
-                    background-color: @blue;
-                    padding: 10px;
-                    border-bottom: 1px solid @blueDark;
-                    line-height: 14px;
-
-                    a {
-                        float: none;
-                        font-size: 14px;
-                        display: inline;
-                        text-decoration: underline;
-                        padding: 0 2px;
-
+                    &.dropdown {
                     }
 
-                    &.link {
-                        padding: 0;
+                    &.last {
+                        padding-right: 0;
+                    }
 
-                        a {
-                            padding: 12px 22px;
-                            display: block;
-                            text-decoration: none;
+                    &.highlight {
+                        background-color: @magenta;
+                    }
+
+                    img {
+                        float: left;
+                        height: 42px;
+                        display: inline;
+                        margin: 0 10px 0 0;
+
+
+                        &.right {
+                            float: right;
+                            margin: 0 0 0 10px;
                         }
                     }
                 }
+
+
+
+                .left-group {
+                    .left;
+                    margin-right: 280px;
+                }
+
+                .right-group {
+                }
+
+                ul {
+                    display: none;
+                    position: absolute;
+                    li {
+                        background-color: @blue;
+                        padding: 10px;
+                        border-bottom: 1px solid @blueDark;
+                        line-height: 14px;
+
+                        a {
+                            float: none;
+                            font-size: 14px;
+                            display: inline;
+                            text-decoration: underline;
+                            padding: 0 2px;
+
+                        }
+
+                        &.link {
+                            padding: 0;
+
+                            a {
+                                padding: 12px 22px;
+                                display: block;
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+
+
+
             }
+
         
         }
     }

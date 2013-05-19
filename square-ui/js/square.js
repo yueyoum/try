@@ -7,9 +7,12 @@
                 new NavDorpDown($(obj).next())
             );
 
+            var left_offset_additon = $(this).attr('left-offset-addition');
+            left_offset_additon = left_offset_additon == undefined ? 0 : parseInt(left_offset_additon);
+
             $(this).unbind('mouseover').unbind('mouseout');
             $(this).bind('mouseover', function(){
-                dropdowns[index].show(nav_height, $(obj).offset().left);
+                dropdowns[index].show(nav_height, $(obj).offset().left + left_offset_additon);
             }).bind('mouseout', function(){
                 dropdowns[index].hidden();
             })

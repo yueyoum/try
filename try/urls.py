@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -17,9 +18,10 @@ urlpatterns = patterns('',
     url(r'', include('upload_avatar.urls')),
     url(r'', include('siteuser.urls')),
     url(r'', include('posts.urls')),
+    url(r'', include('notifyme.urls')),
 )
 
-
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-urlpatterns += staticfiles_urlpatterns()
+if settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()
 

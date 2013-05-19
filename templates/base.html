@@ -10,13 +10,10 @@
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/project.js"></script>
     <!-- [if lte IE 6]>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-ie.js"></script>
     <![endif]-->
     {% block js %}
     {% endblock %}
     <!-- [if lte IE 6]>
-    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-ie6.min.css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/ie.css" />
     <![endif]-->
 
 
@@ -45,12 +42,16 @@
                 </div>
                 <div class="right-group">
                     {% with user=request.siteuser %}
+                    {% if user %}
+                        <a href="" id="notifya" class="dropdown" dropdown_align="right" left-offset-addition="20">消息 (<span>0</span>)</a>
+                        <ul>
+                        </ul>
+                    {% endif %}
                     <a href="" class="highlight open-modal" modal-window-id="{% if user %}posthead-modal{% else %}login-modal{% endif %}">
                         发新贴
                     </a>
                     {% if user %}
-                        <a href="">消息</a>
-                        <a href="" class="dropdown last" dropdown_align='right'>
+                        <a href="" class="dropdown last" dropdown_align="right">
                             <img src="{{ user.avatar }}" alt="" class="right"/>
                             <span>{{ user.username }}</span>
                             <span class="clear"></span>

@@ -7,6 +7,11 @@ body {
 }
 
 
+#notifya {
+    width: 80px;
+    height: 42px;
+    overflow: hidden;
+}
 
 #main {
     width: @mainWidth;
@@ -14,8 +19,14 @@ body {
 }
 
 
+.item-bg-yellowLight {
+    background-color: #FFFFEE;
+}
 
 
+#notifya {
+    background-color: @cyan;
+}
 
 .none {
     display: none;
@@ -63,7 +74,7 @@ body {
     border-radius: @r;
 }
 
-.scaleit (@s: 1.25) {
+.scaleit (@s: 1.15) {
     transform: scale(@s, @s);
     -webkit-transform: scale(@s, @s);
     -moz-transform: scale(@s, @s);
@@ -172,8 +183,7 @@ body {
 
 
 .index-item {
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding: 10px 0;
     border-bottom: 1px solid #eee;
 
     .avatar {
@@ -225,15 +235,16 @@ body {
 
 
 @forkLineColor: @blueLight;
+@forkLineSize: 3px;
 
 .list-view {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    //margin-bottom: 10px;
+    //padding-bottom: 10px;
     position: relative;
 
     .item-line {
         position: absolute;
-        width: 4px;
+        width: @forkLineSize;
         top: 0;
         left: 22px;
         background-color: #eee;
@@ -260,7 +271,8 @@ body {
     }
 
     .content {
-        margin: 0 0 20px 60px;
+        margin: 0 0 0 60px;
+        padding: 0 0 20px 0;
 
             p {
                 margin: 0;
@@ -310,7 +322,7 @@ body {
                 top: 14px;
                 left: -38px;
                 width: 38px;
-                height: 4px;
+                height: @forkLineSize;
                 background-color: @forkLineColor;
                 z-index: 1;
             }

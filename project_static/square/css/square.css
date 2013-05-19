@@ -313,7 +313,7 @@ ul li {
 }
 #nav-bar .nav-bar-inner div.menus .bottom .left-group {
   float: left;
-  margin-right: 280px;
+  margin-right: 240px;
 }
 #nav-bar .nav-bar-inner div.menus .bottom ul {
   display: none;
@@ -439,9 +439,20 @@ body {
   background: url(/static/img/bg_weave.png) repeat;
   letter-spacing: 1px;
 }
+#notifya {
+  width: 80px;
+  height: 42px;
+  overflow: hidden;
+}
 #main {
   width: 980px;
   margin: 30px auto;
+}
+.item-bg-yellowLight {
+  background-color: #FFFFEE;
+}
+#notifya {
+  background-color: #01dfd7;
 }
 .none {
   display: none;
@@ -537,8 +548,7 @@ a:hover {
   border-top: 1px dashed #2d89ef;
 }
 .index-item {
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  padding: 10px 0;
   border-bottom: 1px solid #eee;
 }
 .index-item .avatar {
@@ -551,11 +561,11 @@ a:hover {
   border-radius: 30px;
 }
 .index-item .avatar img.bigger {
-  transform: scale(1.25, 1.25);
-  -webkit-transform: scale(1.25, 1.25);
-  -moz-transform: scale(1.25, 1.25);
-  -o-transform: scale(1.25, 1.25);
-  -ms-transform: scale(1.25, 1.25);
+  transform: scale(1.15, 1.15);
+  -webkit-transform: scale(1.15, 1.15);
+  -moz-transform: scale(1.15, 1.15);
+  -o-transform: scale(1.15, 1.15);
+  -ms-transform: scale(1.15, 1.15);
 }
 .index-item .rightBlock {
   margin-left: 50px;
@@ -580,13 +590,11 @@ a:hover {
   float: right;
 }
 .list-view {
-  margin-bottom: 10px;
-  padding-bottom: 10px;
   position: relative;
 }
 .list-view .item-line {
   position: absolute;
-  width: 4px;
+  width: 3px;
   top: 0;
   left: 22px;
   background-color: #eee;
@@ -608,14 +616,15 @@ a:hover {
   border-radius: 30px;
 }
 .list-view .avatar img.bigger {
-  transform: scale(1.25, 1.25);
-  -webkit-transform: scale(1.25, 1.25);
-  -moz-transform: scale(1.25, 1.25);
-  -o-transform: scale(1.25, 1.25);
-  -ms-transform: scale(1.25, 1.25);
+  transform: scale(1.15, 1.15);
+  -webkit-transform: scale(1.15, 1.15);
+  -moz-transform: scale(1.15, 1.15);
+  -o-transform: scale(1.15, 1.15);
+  -ms-transform: scale(1.15, 1.15);
 }
 .list-view .content {
-  margin: 0 0 20px 60px;
+  margin: 0 0 0 60px;
+  padding: 0 0 20px 0;
 }
 .list-view .content p {
   margin: 0;
@@ -654,7 +663,7 @@ a:hover {
   top: 14px;
   left: -38px;
   width: 38px;
-  height: 4px;
+  height: 3px;
   background-color: #74b1f4;
   z-index: 1;
 }

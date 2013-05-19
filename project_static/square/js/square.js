@@ -6,14 +6,17 @@
                 new NavDorpDown($(obj).next())
             );
 
+            var left_offset_additon = $(this).attr('left-offset-addition');
+            left_offset_additon = left_offset_additon == undefined ? 0 : parseInt(left_offset_additon);
+
             $(this).unbind('mouseenter').unbind('mouseleave');
             $(this).bind('mouseenter', function(){
                 if($(this).attr('dropdown_align') === 'right')
                     dropdowns[index].show_right(
                         $('#nav-bar').height(),
-                        $(document).width() - $(obj).offset().left - $(obj).width() - 20);
+                        $(document).width() - $(obj).offset().left - $(obj).width() - 20 - left_offset_additon);
                 else
-                    dropdowns[index].show($('#nav-bar').height(), $(obj).offset().left);
+                    dropdowns[index].show($('#nav-bar').height(), $(obj).offset().left - left_offset_additon);
             }).bind('mouseleave', function(){
                 dropdowns[index].hidden();
             })

@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 
 from config import redis_client, UPDATE_CHILD_COUNT_UNTIL
+from notifyme import send_notify
 
 from .models import HeadPost, BodyPost
 
@@ -176,6 +177,11 @@ def post_new_body(request):
 
 
     url = reverse('show_post', kwargs={'post_id': parent_id})
+    if BodyPost.objects.get(id=parent_id).user.id != request.siteuser.id:
+        # 自己跟自己，不用发消息
+        title = HeadPost.objects.get(id=head_id).title
+        send_notify(request.siteuser, parent_id, url, u'{0} 你的帖子后有人跟帖'.format(title))
+
     res = {'ok': True, 'msg': url}
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 

@@ -49,7 +49,7 @@ SITE_ID = 1
 
 USE_I18N = False
 USE_L10N = False
-USE_TZ = False
+USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
@@ -158,6 +158,7 @@ INSTALLED_APPS = (
     'siteuser',
     'upload_avatar',
     'posts',
+    'notifyme',
 )
 
 # A sample logging configuration. The only tangible logging

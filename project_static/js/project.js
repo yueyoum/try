@@ -1,5 +1,8 @@
 (function(window, $){
     $(function(){
+        $('a.dropdown').click(function(e){
+            e.preventDefault();
+        });
 
         // login
         $('#accoutLogin').click(function(e){
@@ -329,6 +332,13 @@
 
 
 
+
+
+
+
+
+
+
         // change background position
         /*
         $('.item-button').mouseenter(function(){
@@ -409,7 +419,15 @@
         });
 
 
+        // background highlight for cursor hover
+        $('.index-item, .list-view .content ').mouseover(function(){
+            $(this).addClass('item-bg-yellowLight');
+        }).mouseout(function(){
+            $(this).removeClass('item-bg-yellowLight');
+        })
 
+
+        get_notifies();
 
     });
 
@@ -464,6 +482,72 @@
         return ForkingListItem;
     
     })();
+
+
+
+
+
+
+    // get notifies
+    function get_notifies() {
+        console.log('get_notifies');
+
+        $.ajax(
+            {
+                type: 'GET',
+                url: '/notifies',
+                data: {},
+                dateType: 'json',
+                async: true,
+                success: function(data){
+                    if(data.length>0) {
+                        console.log(data);
+                        var len = data.length >= 100 ? '99+' : data.length;
+                        $('#notifya span').text(len);
+                        var $ul = $('#notifya').next();
+                        data.forEach(function(item){
+                            var $li = $('<li class="link" />');
+                            $li.append(item);
+                            $li.appendTo($ul);
+                        });
+                        bind_noify_click_event();
+                    }
+                    else {
+                    }
+                },
+                error: function(XmlHttprequest, textStatus, errorThrown){
+                }
+            }
+        );
+    }
+
+
+    function bind_noify_click_event() {
+        $('a.notifyme').click(function(){
+            console.log('click...');
+            var nid = $(this).attr('noti-id');
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/notify/confirm',
+                    data: {
+                        nid: nid,
+                        csrfmiddlewaretoken: get_csrf()
+                    },
+                    dateType: 'json',
+                    async: false,
+                    success: function(data){
+                        return true;
+                    },
+                    error: function(XmlHttprequest, textStatus, errorThrown){
+                        return true;
+                    }
+                }
+            );
+        });
+    }
+
+
 
 
 

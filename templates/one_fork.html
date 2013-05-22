@@ -1,0 +1,24 @@
+
+<div class="fork-view" id="item{{ fork.id }}">
+        <div class="avatar">
+            <a href="">
+            <img src="{{ fork.user.avatar }}" alt="" width="32px" height="32px"/>
+            </a>
+        </div>
+        <div class="fork-line"></div>
+        <div class="content" id="content{{ fork.id }}">
+            <p class="name">
+                <a href="">{{ fork.user.username }}</a>
+                {% if fork.user.sign %}( {{ fork.user.sign }} ){% endif %}
+                <span class="right">
+                <a href="/posts/{{ fork.id }}">{{ fork.child_counts }} 跟帖</a>
+                </span>
+            </p>
+
+            <a href="/posts/{{ fork.id }}">
+                <p class="text">{{ fork.content }}</p>
+                <p class="time">{{ fork.posted_at }}</p>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>

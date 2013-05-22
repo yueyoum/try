@@ -27,15 +27,6 @@
             e.preventDefault();
             var wid = $(this).attr('modal-window-id');
             open_modal_window(wid);
-
-            var head_id = undefined, parent_id = undefined;
-            head_id = $(this).attr('head-id');
-            parent_id = $(this).attr('parent-id');
-            if(head_id != undefined && parent_id != undefined) {
-                $('#nBodyHeadID').val(head_id);
-                $('#nBodyParentID').val(parent_id);
-            }
-
         });
 
 
@@ -47,10 +38,10 @@
             $('#' + wid).find('div.oldtext').text(text);
             open_modal_window(wid);
 
-            var head_id = undefined, parent_id = undefined;
+            var head_id, parent_id;
             head_id = $(this).attr('head-id');
             parent_id = $(this).attr('parent-id');
-            if(head_id != undefined && parent_id != undefined) {
+            if(head_id !== undefined && parent_id !== undefined) {
                 $('#nBodyHeadID').val(head_id);
                 $('#nBodyParentID').val(parent_id);
             }

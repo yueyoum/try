@@ -4,6 +4,17 @@
             e.preventDefault();
         });
 
+
+        // scroll
+        (function($){
+            var url = window.location.href;
+            console.log(url);
+            var cid = url.split('#');
+            if(cid.length==2) {
+                $('html').scrollTo('#content' + cid[1], 300);
+            }
+        })($);
+
         // login
         $('#accoutLogin').click(function(e){
             e.preventDefault();
@@ -16,7 +27,7 @@
 
 
 
-            if(email.length==0 || passwd.length==0) {
+            if(email.length===0 || passwd.length===0) {
                 make_warning('#loginWaring', '请填写电子邮件和密码');
                 return false;
             }
@@ -219,9 +230,10 @@
             e.preventDefault();
             var content = $('#nBodyContent').val();
 
-            var head_id = undefined, parent_id = undefined;
+            var head_id, parent_id, item_last;
             head_id = $('#nBodyHeadID').val();
             parent_id = $('#nBodyParentID').val();
+            item_last = $('#item' + parent_id).attr('item-last');
 
             if(head_id === undefined || parent_id === undefined) {
                 make_warning('#postBodyWarning', '有错误');
@@ -243,6 +255,8 @@
                     data: {
                         head_id: head_id,
                         parent_id: parent_id,
+                        items_count: get_items_count(),
+                        item_last: item_last,
                         content: content,
                         csrfmiddlewaretoken: get_csrf()
                     },
@@ -250,14 +264,27 @@
                     async: false,
                     success: function(data){
                         if(data.ok) {
-                            window.location = data.msg;
+                            $('#postbody-modal').bPopup().close();
+                            if(data.last){
+                                $('#item' + parent_id).after(data.msg);
+                            }
+                            else{
+                                $('#forksarea' + parent_id).append(data.msg);
+                                var new_height = $('#item' + parent_id).height();
+                                $('#item' + parent_id).find('.item-line').addClass('fork').height(new_height);
+                                forkingitems.forEach(function(item){
+                                    if(item.fid === parent_id) {
+                                        item.max_height = new_height;
+                                    }
+                                });
+                            }
                         }
                         else {
                             make_warning('#postHeadWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#postHeadWarning', '发生错误，请稍后再试')
+                        make_warning('#postHeadWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -440,6 +467,13 @@
         return $('input[name=csrfmiddlewaretoken]').attr('value');
     }
 
+    function get_items_count(){
+        var c = $('#itemCount').text();
+        return c === undefined ? 0 : c;
+    }
+
+
+
     function make_warning(obj, text) {
         $(obj).text(text);
         $(obj).show(100);
@@ -456,17 +490,18 @@
             this.item_line = this.pa.find('.item-line');
         }
 
+
         ForkingListItem.prototype.upit = function() {
             $('#forksarea' + this.fid).attr('show', '0').slideUp(200);
             this.obj.find('.text').text('打开分支');
             this.item_line.css('height', this.min_height);
-        }
+        };
 
         ForkingListItem.prototype.downit = function() {
             $('#forksarea' + this.fid).attr('show', '1').slideDown(200);
             this.obj.find('.text').text('收起分支');
             this.item_line.css('height', this.max_height);
-        }
+        };
 
         ForkingListItem.prototype.toggle = function() {
             var show = $('#forksarea' + this.fid).attr('show');
@@ -476,11 +511,9 @@
             else {
                 this.downit();
             }
-            
-        }
+        };
 
         return ForkingListItem;
-    
     })();
 
 
@@ -490,8 +523,6 @@
 
     // get notifies
     function get_notifies() {
-        console.log('get_notifies');
-
         $.ajax(
             {
                 type: 'GET',
@@ -501,7 +532,6 @@
                 async: true,
                 success: function(data){
                     if(data.length>0) {
-                        console.log(data);
                         var len = data.length >= 100 ? '99+' : data.length;
                         $('#notifya span').text(len);
                         var $ul = $('#notifya').next();

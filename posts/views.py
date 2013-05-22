@@ -6,7 +6,7 @@ from functools import wraps
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
 from django.db.models import F
 
@@ -14,6 +14,9 @@ from config import redis_client, UPDATE_CHILD_COUNT_UNTIL
 from notifyme import send_notify
 
 from .models import HeadPost, BodyPost
+
+
+MAX_ITEMS = 12
 
 
 
@@ -58,7 +61,7 @@ def set_post_score_status(pobj, uid):
         setattr(pobj, 'scored', False)
 
 
-def get_body_lists(uid, start_id, length=20):
+def get_body_lists(uid, start_id, length=MAX_ITEMS):
     result = []
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
@@ -113,15 +116,14 @@ def post_new_head(request):
 
     body = BodyPost.objects.create(
         user=request.siteuser,
-        content = content,
+        content=content,
     )
 
     HeadPost.objects.create(
-        id = body.id,
-        user = request.siteuser,
+        id=body.id,
+        user=request.siteuser,
         title=title,
     )
-
 
 
     url = reverse('show_post', kwargs={'post_id': body.id})
@@ -136,12 +138,12 @@ def post_new_body(request):
     head_id = request.POST.get('head_id', None)
     parent_id = request.POST.get('parent_id', None)
     content = request.POST.get('content', None)
-
+    # items_count = request.POST.get('items_count', 0)
+    item_last = request.POST.get('item_last', 0) == '1'
 
     if not content:
         res = {'ok': False, 'msg': '填写内容啊'}
         return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
-
 
     try:
         head_id = int(head_id)
@@ -154,8 +156,8 @@ def post_new_body(request):
         new_body = BodyPost.objects.create(
             user=request.siteuser,
             head_id=head_id,
-            parent_id = parent_id,
-            content = content
+            parent_id=parent_id,
+            content=content
         )
     except Exception as e:
         print 'Error:', e
@@ -171,18 +173,28 @@ def post_new_body(request):
     else:
         redis_client.hincrby('childcount', head_id, 1)
 
-    #HeadPost.objects.filter(id=head_id).update(body_count=F('body_count')+1,
-                                               #updated_at=datetime.datetime.now())
     HeadPost.objects.filter(id=head_id).update(updated_at=datetime.datetime.now())
 
 
-    url = reverse('show_post', kwargs={'post_id': parent_id})
     if BodyPost.objects.get(id=parent_id).user.id != request.siteuser.id:
         # 自己跟自己，不用发消息
+        url = reverse('show_post', kwargs={'post_id': parent_id})
         title = HeadPost.objects.get(id=head_id).title
         send_notify(request.siteuser, parent_id, url, u'{0} 你的帖子后有人跟帖'.format(title))
 
-    res = {'ok': True, 'msg': url}
+    setattr(new_body, 'child_counts', 0)
+    if item_last:
+        tpl = 'one_body.html'
+        ctx = {'item': new_body}
+    else:
+        tpl = 'one_fork.html'
+        ctx = {'fork': new_body}
+
+    t = loader.get_template(tpl)
+    html = t.render(Context(ctx))
+
+    res = {'ok': True, 'last': item_last, 'msg': html}
+
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
 
@@ -203,6 +215,7 @@ def show_post(request, post_id):
         'title': title,
         'head_id': head_id,
         'items': posts,
+        'items_count': len(posts),
         'next_start_id': posts[-1].id,
         'next_body_counts': posts[-1].child_counts,
     }
@@ -294,4 +307,3 @@ class PostScoring(object):
 
 
 post_scoring = PostScoring(redis_client)
-

@@ -5,15 +5,6 @@
         });
 
 
-        // scroll
-        (function($){
-            var url = window.location.href;
-            console.log(url);
-            var cid = url.split('#');
-            if(cid.length==2) {
-                $('html').scrollTo('#content' + cid[1], 300);
-            }
-        })($);
 
         // login
         $('#accoutLogin').click(function(e){
@@ -255,7 +246,6 @@
                     data: {
                         head_id: head_id,
                         parent_id: parent_id,
-                        items_count: get_items_count(),
                         item_last: item_last,
                         content: content,
                         csrfmiddlewaretoken: get_csrf()
@@ -267,17 +257,25 @@
                             $('#postbody-modal').bPopup().close();
                             if(data.last){
                                 $('#item' + parent_id).after(data.msg);
+                                var $item_line = $('<div class="item-line" />');
+                                $item_line.css('height', $('#item' + parent_id).height());
+                                $('#item' + parent_id).append($item_line);
                             }
                             else{
                                 $('#forksarea' + parent_id).append(data.msg);
                                 var new_height = $('#item' + parent_id).height();
                                 $('#item' + parent_id).find('.item-line').addClass('fork').height(new_height);
-                                forkingitems.forEach(function(item){
-                                    if(item.fid === parent_id) {
-                                        item.max_height = new_height;
+
+                                var index, forkingitemsLength = forkingitems.length;
+                                for(index=0; index<forkingitemsLength; index++) {
+                                    if(forkingitems[index].fid === parent_id) {
+                                        forkingitems[index].max_height = new_height;
+                                        break;
                                     }
-                                });
+                                }
                             }
+
+                            $('html').scrollTo('#item' + data.itemid, 200);
                         }
                         else {
                             make_warning('#postHeadWarning', data.msg);
@@ -467,10 +465,6 @@
         return $('input[name=csrfmiddlewaretoken]').attr('value');
     }
 
-    function get_items_count(){
-        var c = $('#itemCount').text();
-        return c === undefined ? 0 : c;
-    }
 
 
 

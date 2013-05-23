@@ -138,7 +138,6 @@ def post_new_body(request):
     head_id = request.POST.get('head_id', None)
     parent_id = request.POST.get('parent_id', None)
     content = request.POST.get('content', None)
-    # items_count = request.POST.get('items_count', 0)
     item_last = request.POST.get('item_last', 0) == '1'
 
     if not content:
@@ -193,7 +192,7 @@ def post_new_body(request):
     t = loader.get_template(tpl)
     html = t.render(Context(ctx))
 
-    res = {'ok': True, 'last': item_last, 'msg': html}
+    res = {'ok': True, 'last': item_last, 'msg': html, 'itemid': new_body.id}
 
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
@@ -215,7 +214,6 @@ def show_post(request, post_id):
         'title': title,
         'head_id': head_id,
         'items': posts,
-        'items_count': len(posts),
         'next_start_id': posts[-1].id,
         'next_body_counts': posts[-1].child_counts,
     }

@@ -2,7 +2,6 @@
 
 {% block mainLeft %}
 <h2 class="title"><a href="/posts/{{ head_id }}">{{ title }}</a></h2>
-<div id="itemCount" style="display: none;">{{ items_count }}</div>
 
     {% for item in items %}
         {% include "one_body.html" %}

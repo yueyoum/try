@@ -2,7 +2,7 @@ body {
     font-size: 14px;
     padding: 0;
     margin: 0;
-    background: url(/static/img/bg_weave.png) repeat;
+    background: url(/static/img/bg.png) repeat;
     letter-spacing: 1px;
 }
 
@@ -74,7 +74,7 @@ body {
     border-radius: @r;
 }
 
-.scaleit (@s: 1.15) {
+.scaleit (@s: 1.1) {
     transform: scale(@s, @s);
     -webkit-transform: scale(@s, @s);
     -moz-transform: scale(@s, @s);
@@ -235,7 +235,7 @@ body {
 
 
 @forkLineColor: @blueLight;
-@forkLineSize: 3px;
+@forkLineSize: 1px;
 
 .list-view {
     //margin-bottom: 10px;
@@ -246,7 +246,7 @@ body {
         position: absolute;
         width: @forkLineSize;
         top: 0;
-        left: 22px;
+        left: 24px;
         background-color: #eee;
         z-index: 1;
 
@@ -293,6 +293,7 @@ body {
             }
 
         div.extra {
+            height: 24px;
             button {
                 color: #337FA3;
                 background: none;
@@ -319,8 +320,8 @@ body {
             position: relative;
             .fork-line {
                 position: absolute;
-                top: 14px;
-                left: -38px;
+                top: 16px;
+                left: -35px;
                 width: 38px;
                 height: @forkLineSize;
                 background-color: @forkLineColor;

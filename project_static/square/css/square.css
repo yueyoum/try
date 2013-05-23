@@ -436,7 +436,7 @@ body {
   font-size: 14px;
   padding: 0;
   margin: 0;
-  background: url(/static/img/bg_weave.png) repeat;
+  background: url(/static/img/bg.png) repeat;
   letter-spacing: 1px;
 }
 #notifya {
@@ -561,11 +561,11 @@ a:hover {
   border-radius: 30px;
 }
 .index-item .avatar img.bigger {
-  transform: scale(1.15, 1.15);
-  -webkit-transform: scale(1.15, 1.15);
-  -moz-transform: scale(1.15, 1.15);
-  -o-transform: scale(1.15, 1.15);
-  -ms-transform: scale(1.15, 1.15);
+  transform: scale(1.1, 1.1);
+  -webkit-transform: scale(1.1, 1.1);
+  -moz-transform: scale(1.1, 1.1);
+  -o-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
 }
 .index-item .rightBlock {
   margin-left: 50px;
@@ -594,9 +594,9 @@ a:hover {
 }
 .list-view .item-line {
   position: absolute;
-  width: 3px;
+  width: 1px;
   top: 0;
-  left: 22px;
+  left: 24px;
   background-color: #eee;
   z-index: 1;
 }
@@ -616,11 +616,11 @@ a:hover {
   border-radius: 30px;
 }
 .list-view .avatar img.bigger {
-  transform: scale(1.15, 1.15);
-  -webkit-transform: scale(1.15, 1.15);
-  -moz-transform: scale(1.15, 1.15);
-  -o-transform: scale(1.15, 1.15);
-  -ms-transform: scale(1.15, 1.15);
+  transform: scale(1.1, 1.1);
+  -webkit-transform: scale(1.1, 1.1);
+  -moz-transform: scale(1.1, 1.1);
+  -o-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
 }
 .list-view .content {
   margin: 0 0 0 60px;
@@ -638,6 +638,9 @@ a:hover {
   font-size: 14px;
   color: #000000;
   margin: 15px 0;
+}
+.list-view .content div.extra {
+  height: 24px;
 }
 .list-view .content div.extra button {
   color: #337FA3;
@@ -660,10 +663,10 @@ a:hover {
 }
 .list-view .forksarea .fork-view .fork-line {
   position: absolute;
-  top: 14px;
-  left: -38px;
+  top: 16px;
+  left: -35px;
   width: 38px;
-  height: 3px;
+  height: 1px;
   background-color: #74b1f4;
   z-index: 1;
 }

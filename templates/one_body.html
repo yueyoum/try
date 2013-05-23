@@ -19,6 +19,7 @@
         <p class="time">{{ item.posted_at }}</p>
 
         <div class="extra">
+            <!--
             <div class="left">
                 <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}" modal-window-id="login-modal">
                     <div class="icon good {% if item.scored_good %}scored-good{% endif %}"></div>
@@ -31,6 +32,7 @@
                     <div class="clear"></div>
                 </button>
             </div>
+        -->
             <div class="right list-view-action">
                 {% if item.post_forks %}
                 <button class="button has-fork" fork-id="{{ item.id }}">

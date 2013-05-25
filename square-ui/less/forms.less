@@ -1,4 +1,4 @@
-@inputColor:    @grayLight;
+@inputColor:    #ccc;
 
 .square-input {
     border: 1px solid @inputColor;
@@ -14,16 +14,20 @@
 .input-control {
     margin: 0 0 10px 0;
     background-color: @inputColor;
-    //color: @black;
+    position: relative;
 
     label {
-        display: inline-block;
+        display: block;
         padding: 0 10px 0 0;
         background-color: @cyanBlue;
         width: 80px;
         color: @white;
         text-align: right;
         line-height: 30px;
+        position: absolute;
+        top: 0;
+        left: 0;
+
     }
 
     input {
@@ -32,8 +36,9 @@
         margin: 0;
         width: 220px;
         height: 28px;
-        color: @black;
+        color: #333;
         background-color: @inputColor;
+        margin-left: 90px;
 
         &.error {
             border: 1px solid @red;
@@ -49,8 +54,16 @@
 
     &.vertical {
         background-color: @white;
+        position: static;
+
         label {
             display: block;
+            position: static;
+        }
+
+        input {
+            position: static;
+            margin-left: 0;
         }
     }
 }

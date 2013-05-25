@@ -2,12 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="shoutcut icon" type="image/x-icon" href="{{ STATIC_URL }}img/favicon.ico" />
     <title>
-        {% block title %}{% endblock %}
+        {% block title %}{% endblock %} :: 骚年，讲个故事吧 ::
     </title>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.0.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/jquery.bpopup.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.charcount.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/project.js"></script>
     <!-- [if lte IE 6]>
@@ -35,43 +37,34 @@
         <div class="menus">
             <div class="upper"><a href="/">纯洁故事 chunjiegushi.com</a></div>
             <div class="bottom">
-                <div class="left-group">
-                    <a href="">最新</a>
-                    <a href="">今日热门</a>
-                    <a href="">本周热门</a>
-                    <span class="clear"></span>
-                </div>
-                <div class="right-group">
-                    {% with user=request.siteuser %}
-                    {% if user %}
-                        <a href="" id="notifya" class="dropdown" dropdown_align="right" left-offset-addition="20">消息 (<span>0</span>)</a>
-                        <ul>
-                        </ul>
-                    {% endif %}
-                    <a href="" class="highlight open-modal" modal-window-id="{% if user %}posthead-modal{% else %}login-modal{% endif %}">
-                        发新贴
+                <a href="/">最新更新</a>
+                <a href="">今日热门</a>
+                <a href="">本周热门</a>
+
+                {% if request.siteuser %}
+                    <a href="" class="dropdown last righta" dropdown_align="right">
+                        <img src="{{ request.siteuser.avatar }}" alt="" class="right"/>
+                        <span>{{ request.siteuser.username }}</span>
+                        <span class="clear"></span>
                     </a>
-                    {% if user %}
-                        <a href="" class="dropdown last" dropdown_align="right">
-                            <img src="{{ user.avatar }}" alt="" class="right"/>
-                            <span>{{ user.username }}</span>
-                            <span class="clear"></span>
-                        </a>
-                        <ul>
-                            <li class="link"><a href="">我发布的帖子</a></li>
-                            <li class="link"><a href="">我关注的帖子</a></li>
-                            <li class="link"><a href="account/settings">帐号设置</a></li>
-                            <li class="link"><a href="" id="accoutLogout">退出</a></li>
-                        </ul>
-                    {% else %}
-                        <a href="" class="open-modal" modal-window-id="login-modal">登录</a>
-                        <a href="" class="open-modal last" modal-window-id="register-modal">注册</a>
-                    {% endif %}
-                    {% endwith %}
-                    <span class="clear"></span>
-                </div>
-                <div class="clear"></div>
-            </div>
+                    <ul>
+                        <li class="link"><a href="">我发布的帖子</a></li>
+                        <li class="link"><a href="">我关注的帖子</a></li>
+                        <li class="link"><a href="account/settings">帐号设置</a></li>
+                        <li class="link"><a href="" id="accoutLogout">退出</a></li>
+                    </ul>
+                {% else %}
+                    <a href="" class="open-modal righta" modal-window-id="login-modal">登录</a>
+                    <a href="" class="open-modal last righta" modal-window-id="register-modal">注册</a>
+                {% endif %}
+                <a href="" class="highlight open-modal righta" modal-window-id="{% if request.siteuser %}posthead-modal{% else %}login-modal{% endif %}">
+                    发新贴
+                </a>
+                {% if request.siteuser %}
+                    <a href="" id="notifya" class="dropdown righta" dropdown_align="right" left-offset-addition="20">消息 (<span>0</span>)</a>
+                    <ul>
+                    </ul>
+                {% endif %}
         </div>
         <div class="clear"></div>
     </div>
@@ -82,22 +75,7 @@
 <div id="main">
     <div id="mainLeft">{% block mainLeft %}{% endblock %}</div>
     <div id="mainRight">
-        <div class="box">
-                <div class="header">
-                    <span class="bigger">骚年</span> 你为什么还不 <span class="login">登录</span>
-                </div>
-                <p><a href="">微博登录</a></p>
-                <p><a href="">人人登录</a></p>
-                <p><a href="">QQ登录</a></p>
-                <p><a href="">百度登录</a></p>
-                <p><a href="">豆瓣登录</a></p>
-                
-        </div>
-        <div class="box">
-            <div class="header">收听</div>
-            <p><a href="">新浪微博</a></p>
-            <p><a href="">人人公共主页</a></p>
-        </div>
+        {% include "right_side.html" %}
     </div>
     <div class="clear"></div>
 </div>
@@ -122,14 +100,14 @@
                 </div>
                 <input type="submit" value="登录" class="button bg-color-magenta" id="accoutLogin"/>
             </form>
-            <div id="loginWaring" class="waring"></div>
+            <div id="loginWarning" class="warning"></div>
         </div>
         <div class="social-list right">
             <p>使用 合作网站 帐号登录</p>
-            <div><a href="">微博   帐号登录</a></div>
-            <div><a href="">人人网 帐号登录</a></div>
-            <div><a href="">QQ     帐号登录</a></div>
-            <div><a href="">百度   帐号登录</a></div>
+            <div><a href="">微博登录</a></div>
+            <div><a href="">人人登录</a></div>
+            <div><a href="">豆瓣登录</a></div>
+            <div><a href="">QQ登录</a></div>
         </div>
         <div class="clear"></div>
     </div>
@@ -165,15 +143,15 @@
                 </div>
                 <input type="submit" value="注册" class="button bg-color-magenta" id="accoutRegister"/>
             </form>
-            <div id="registerWaring" class="waring"></div>
+            <div id="registerWarning" class="warning"></div>
         </div>
 
         <div class="social-list right">
             <p>使用 合作网站 帐号登录</p>
-            <div><a href="">微博   帐号登录</a></div>
-            <div><a href="">人人网 帐号登录</a></div>
-            <div><a href="">QQ     帐号登录</a></div>
-            <div><a href="">百度   帐号登录</a></div>
+            <div><a href="">微博登录</a></div>
+            <div><a href="">人人登录</a></div>
+            <div><a href="">豆瓣登录</a></div>
+            <div><a href="">QQ登录</a></div>
         </div>
         <div class="clear"></div>
     </div>
@@ -192,14 +170,16 @@
             <div class="input-control vertical">
                 <label for="nPostHead">吸引眼球的标题</label>
                 <input id="nPostHead" type="text" name="posthead" />
+                <p>还可以输入 <span>40</span> 字</p>
             </div>
             <div class="input-control vertical">
                 <label for="nPostContent">毫无节操的内容</label>
                 <textarea id="nPostContent" name="postcontent" cols="80" rows="10"></textarea>
+                <p>还可以输入 <span>255</span> 字</p>
             </div>
             <input type="submit" value="发布" class="button w100 bg-color-magenta" id="postNewHead"/>
         </form>
-        <div id="postHeadWarning" class="waring"></div>
+        <div id="postHeadWarning" class="warning"></div>
     </div>
 </div>
 
@@ -219,10 +199,11 @@
             <div class="input-control vertical">
                 <label for="nBodyContent">新的发展</label>
                 <textarea id="nBodyContent" name="bodycontent" cols="80" rows="10"></textarea>
+                <p>还可以输入 <span>255</span> 字</p>
             </div>
             <input type="submit" value="跟帖" class="button w100 bg-color-magenta" id="postNewBody"/>
         </form>
-        <div id="postBodyWarning" class="waring"></div>
+        <div id="postBodyWarning" class="warning"></div>
     </div>
 </div>
 

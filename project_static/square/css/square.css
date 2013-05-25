@@ -256,7 +256,7 @@ ul li {
   width: 100%;
   margin: 0;
   padding: 0;
-  height: 120px;
+  height: 100px;
 }
 #nav-bar .nav-bar-inner {
   width: 980px;
@@ -264,12 +264,12 @@ ul li {
 }
 #nav-bar .nav-bar-inner div.logo {
   float: left;
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
 }
 #nav-bar .nav-bar-inner div.logo img {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
 }
 #nav-bar .nav-bar-inner div.menus {
   margin-left: 130px;
@@ -280,13 +280,13 @@ ul li {
   word-spacing: 60px;
 }
 #nav-bar .nav-bar-inner div.menus .upper a {
-  color: #000000;
+  color: #0E959D;
 }
 #nav-bar .nav-bar-inner div.menus .bottom {
-  height: 42px;
-  line-height: 42px;
-  background-color: #2d89ef;
-  margin-top: 20px;
+  height: 32px;
+  line-height: 32px;
+  background-color: #545652;
+  margin-top: 10px;
 }
 #nav-bar .nav-bar-inner div.menus .bottom a {
   float: left;
@@ -301,9 +301,13 @@ ul li {
 #nav-bar .nav-bar-inner div.menus .bottom a.highlight {
   background-color: #ff0080;
 }
+#nav-bar .nav-bar-inner div.menus .bottom a.righta {
+  float: right;
+}
 #nav-bar .nav-bar-inner div.menus .bottom a img {
   float: left;
-  height: 42px;
+  height: 32px;
+  width: 32px;
   display: inline;
   margin: 0 10px 0 0;
 }
@@ -311,18 +315,14 @@ ul li {
   float: right;
   margin: 0 0 0 10px;
 }
-#nav-bar .nav-bar-inner div.menus .bottom .left-group {
-  float: left;
-  margin-right: 240px;
-}
 #nav-bar .nav-bar-inner div.menus .bottom ul {
   display: none;
   position: absolute;
 }
 #nav-bar .nav-bar-inner div.menus .bottom ul li {
-  background-color: #2d89ef;
+  background-color: #545652;
   padding: 10px;
-  border-bottom: 1px solid #0f63c1;
+  border-bottom: 1px solid #646661;
   line-height: 14px;
 }
 #nav-bar .nav-bar-inner div.menus .bottom ul li a {
@@ -346,67 +346,81 @@ ul li {
 .modal .header {
   color: #ffffff;
   background-color: #2d89ef;
+  height: 32px;
 }
 .modal .header .title {
-  padding: 10px;
   font-size: 16px;
   font-weight: bold;
   float: left;
+  line-height: 32px;
+  padding-left: 10px;
 }
 .modal .header .close {
   float: right;
-  padding: 4px 10px;
   background-color: #0f63c1;
   cursor: pointer;
+  line-height: 32px;
+  padding: 0 10px;
 }
 .modal .content {
   padding: 10px;
   background-color: #ffffff;
 }
 .square-input {
-  border: 1px solid #a4a4a4;
+  border: 1px solid #cccccc;
   padding: 0 6px;
   margin: 0;
   width: 220px;
   height: 28px;
   color: #000000;
-  background-color: #a4a4a4;
+  background-color: #cccccc;
 }
 .input-control {
   margin: 0 0 10px 0;
-  background-color: #a4a4a4;
+  background-color: #cccccc;
+  position: relative;
 }
 .input-control label {
-  display: inline-block;
+  display: block;
   padding: 0 10px 0 0;
   background-color: #337fa3;
   width: 80px;
   color: #ffffff;
   text-align: right;
   line-height: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .input-control input {
-  border: 1px solid #a4a4a4;
+  border: 1px solid #cccccc;
   padding: 0 6px;
   margin: 0;
   width: 220px;
   height: 28px;
-  color: #000000;
-  background-color: #a4a4a4;
+  color: #333;
+  background-color: #cccccc;
+  margin-left: 90px;
 }
 .input-control input.error {
   border: 1px solid #df0101;
 }
 .input-control textarea {
-  border: 1px solid #a4a4a4;
+  border: 1px solid #cccccc;
   padding: 6px;
   margin: 0;
 }
 .input-control.vertical {
   background-color: #ffffff;
+  position: static;
 }
 .input-control.vertical label {
   display: block;
+  position: static;
+}
+.input-control.vertical input {
+  position: static;
+  margin-left: 0;
 }
 .button {
   padding: 4px 10px;
@@ -441,7 +455,7 @@ body {
 }
 #notifya {
   width: 80px;
-  height: 42px;
+  height: 32px;
   overflow: hidden;
 }
 #main {
@@ -463,10 +477,14 @@ a {
 a:hover {
   color: #ff0080;
 }
+.warning {
+  color: red;
+  margin-top: 10px;
+}
 .social-list {
   padding-left: 20px;
   margin-left: 20px;
-  border-left: 1px solid gray;
+  border-left: 1px solid #ddd;
 }
 .social-list p {
   font-size: 18px;
@@ -474,14 +492,6 @@ a:hover {
 }
 .social-list div {
   margin-bottom: 20px;
-}
-.social-list div a {
-  display: block;
-  font-size: 16px;
-  line-height: 40px;
-  width: 180px;
-  padding-left: 20px;
-  background-color: green;
 }
 #mainLeft {
   float: left;
@@ -495,50 +505,56 @@ a:hover {
   color: #666;
 }
 #mainRight .box {
-  width: 280px;
-  padding: 10px;
+  width: 300px;
   background-color: #ffffff;
   margin-bottom: 20px;
 }
 #mainRight .box .header {
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid #ddd;
+  padding: 10px 10px 5px 10px;
+  background-color: #eee;
 }
 #mainRight .box .header .bigger {
   font-size: 26px;
   color: #444;
 }
-#mainRight .box .header .login {
-  color: #ff0080;
-  cursor: pointer;
+#mainRight .box .content {
+  padding: 10px;
 }
 .input-control.vertical label {
   display: block;
   width: 542px;
-  padding: 4px 10px;
-  text-align: left;
+  padding: 0 10px;
+  text-align: center;
 }
 .input-control.vertical input {
   width: 540px;
   background-color: #ffffff;
   color: #000000;
-  font-size: 16px;
-  padding: 4px 10px;
+  font-size: 14px;
+  padding: 2px 10px;
 }
 .input-control.vertical textarea {
   width: 540px;
-  height: 150px;
+  height: 120px;
   resize: vertical;
   color: #000000;
-  font-size: 16px;
+  font-size: 14px;
   padding: 10px;
+}
+.input-control.vertical p {
+  margin: 6px 0;
+  color: gray;
+  text-align: right;
+}
+.oldtext {
+  font-size: 14px;
+  color: #666;
 }
 #postbody-modal .oldtext {
   width: 540px;
   padding: 10px;
   color: #666;
-  font-size: 16px;
+  font-size: 14px;
 }
 #postPageBottom {
   text-align: center;
@@ -633,6 +649,11 @@ a:hover {
 }
 .list-view .content p.name {
   background-color: #F0F6F3;
+  height: 22px;
+  line-height: 22px;
+}
+.list-view .content p.name .time {
+  margin-left: 10px;
 }
 .list-view .content p.text {
   font-size: 14px;
@@ -872,4 +893,12 @@ a:hover {
   font-size: 16px;
   margin: 10px 0 0 0;
   display: none;
+}
+#paginator {
+  margin: 20px;
+  text-align: center;
+}
+#paginator a {
+  font-size: 16px;
+  padding: 0 20px;
 }

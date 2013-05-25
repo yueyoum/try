@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import re
 import json
 from functools import wraps
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -11,6 +12,7 @@ from .models import InnerUser, SiteUser
 
 # 注册，登录，退出等都通过 ajax 的方式进行
 
+EMAIL_PATTERN = re.compile('^.+@.+\..+$')
 
 class InnerAccoutError(Exception):
     pass
@@ -48,7 +50,6 @@ def login(request):
     email = request.POST.get('email', None)
     passwd = request.POST.get('passwd', None)
 
-
     if not email or not passwd:
         raise InnerAccoutError('请填写email和密码')
 
@@ -72,10 +73,11 @@ def register(request):
     username = request.POST.get('username', None)
     passwd = request.POST.get('passwd', None)
 
+    if EMAIL_PATTERN.search(email) is None:
+        raise InnerAccoutError('电子邮件格式不正确')
 
     if not email or not username or not passwd:
         raise InnerAccoutError('请完整填写注册信息')
-
 
     if InnerUser.objects.filter(email=email).exists():
         raise InnerAccoutError('此电子邮件已被占用')
@@ -97,6 +99,8 @@ def logout(request):
 
 
 def account_settings(request):
+    if not request.siteuser:
+        return HttpResponseRedirect('/')
     return render_to_response('account_settings.html', context_instance=RequestContext(request))
 
 
@@ -115,6 +119,3 @@ def set_mysign(request):
         raise InnerAccoutError('error...')
 
     # done.
-
-
-

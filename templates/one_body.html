@@ -13,10 +13,10 @@
         <p class="name">
             <a href="">{{ item.user.username }}</a>
             {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
+            <span class="time">{{ item.posted_at }}</span>
         </p>
 
         <p class="text">{{ item.content }}</p>
-        <p class="time">{{ item.posted_at }}</p>
 
         <div class="extra">
             <!--

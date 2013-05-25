@@ -19,7 +19,7 @@
 
 
             if(email.length===0 || passwd.length===0) {
-                make_warning('#loginWaring', '请填写电子邮件和密码');
+                make_warning('#loginWarning', '请填写电子邮件和密码');
                 return false;
             }
 
@@ -39,11 +39,11 @@
                             window.location.reload();
                         }
                         else {
-                            make_warning('#loginWaring', data.msg);
+                            make_warning('#loginWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#loginWaring', '发生错误，请稍后再试')
+                        make_warning('#loginWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -54,7 +54,7 @@
         // register 
         $('#accoutRegister').click(function(e){
             e.preventDefault();
-            var email, username, passwd, passwd2;
+            var email, username, passwd, passwd2, _tmp_email;
             email = $('#rEmail').val();
             username = $('#rName').val();
             passwd = $('#rP').val();
@@ -65,13 +65,19 @@
             passwd = strip(passwd);
             passwd2 = strip(passwd2);
 
-            if(email.length == 0 || username.length == 0 || passwd.length == 0 || passwd2.length == 0) {
-                make_warning('#registerWaring', '请完整填写注册信息');
+            _tmp_email = email.replace(/^.+@.+\..+$/, '');
+            if(_tmp_email.length>0){
+                make_warning('#registerWarning', '喂，目测邮箱格式不正确啊');
+                return false;
+            }
+
+            if(email.length === 0 || username.length === 0 || passwd.length === 0 || passwd2.length === 0) {
+                make_warning('#registerWarning', '请完整填写注册信息');
                 return false;
             }
 
             if(passwd != passwd2) {
-                make_warning('#registerWaring', '两次密码不一致');
+                make_warning('#registerWarning', '两次密码不一致');
                 return false;
             }
 
@@ -93,11 +99,11 @@
                             window.location.reload();
                         }
                         else {
-                            make_warning('#registerWaring', data.msg);
+                            make_warning('#registerWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#registerWaring', '发生错误，请稍后再试')
+                        make_warning('#registerWarning', '发生错误，请稍后再试')
                     }
                 }
             );
@@ -158,11 +164,11 @@
                             $('#mySign').val('');
                         }
                         else {
-                            make_warning('#loginWaring', data.msg);
+                            make_warning('#loginWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#loginWaring', '发生错误，请稍后再试')
+                        make_warning('#loginWarning', '发生错误，请稍后再试')
                     }
                 }
             );
@@ -354,6 +360,27 @@
         });
 
 
+        // input character limit
+        $('#nPostHead').charcount({
+            maxLength: 40,
+            position: 'none'
+        }).bind('update', function(evt, length, remaining){
+            $(this).next().find('span').text(remaining);
+        });
+
+        $('#nPostContent').charcount({
+            maxLength: 255,
+            position: 'none'
+        }).bind('update', function(evt, length, remaining){
+            $(this).next().find('span').text(remaining);
+        });
+
+        $('#nBodyContent').charcount({
+            maxLength: 255,
+            position: 'none'
+        }).bind('update', function(evt, length, remaining){
+            $(this).next().find('span').text(remaining);
+        });
 
 
 

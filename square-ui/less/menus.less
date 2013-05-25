@@ -1,9 +1,11 @@
+@navHeight:  32px;
+
 #nav-bar {
     background: url('/static/img/header_weave.png');
     width: 100%;
     margin: 0;
     padding: 0;
-    height: 120px;
+    height: 100px;
 
     .nav-bar-inner {
         width: @mainWidth;
@@ -12,12 +14,12 @@
 
         div.logo {
             .left;
-            height: 120px;
-            width: 120px;
+            height: 100px;
+            width: 100px;
 
             img {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
             }
         }
 
@@ -29,15 +31,15 @@
                 padding: 10px 0 0 0;
                 word-spacing: 60px;
                 a {
-                    color: @black;
+                    color: #0E959D;
                 }
             }
 
             .bottom {
-                height: 42px;
-                line-height: 42px;
-                background-color: @blue;
-                margin-top: 20px;
+                height: @navHeight;
+                line-height: @navHeight;
+                background-color: #545652;
+                margin-top: 10px;
 
                 a {
                     .left;
@@ -57,9 +59,14 @@
                         background-color: @magenta;
                     }
 
+                    &.righta {
+                        float: right;
+                    }
+
                     img {
                         float: left;
-                        height: 42px;
+                        height: @navHeight;
+                        width: @navHeight;
                         display: inline;
                         margin: 0 10px 0 0;
 
@@ -72,22 +79,13 @@
                 }
 
 
-
-                .left-group {
-                    .left;
-                    margin-right: 240px;
-                }
-
-                .right-group {
-                }
-
                 ul {
                     display: none;
                     position: absolute;
                     li {
-                        background-color: @blue;
+                        background-color: #545652;
                         padding: 10px;
-                        border-bottom: 1px solid @blueDark;
+                        border-bottom: 1px solid #646661;
                         line-height: 14px;
 
                         a {
@@ -112,10 +110,8 @@
                 }
 
 
-
             }
 
-        
         }
     }
 }

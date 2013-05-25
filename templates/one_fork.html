@@ -10,6 +10,7 @@
             <p class="name">
                 <a href="">{{ fork.user.username }}</a>
                 {% if fork.user.sign %}( {{ fork.user.sign }} ){% endif %}
+                <span class="time">{{ fork.posted_at }}</span>
                 <span class="right">
                 <a href="/posts/{{ fork.id }}">{{ fork.child_counts }} 跟帖</a>
                 </span>
@@ -17,7 +18,6 @@
 
             <a href="/posts/{{ fork.id }}">
                 <p class="text">{{ fork.content }}</p>
-                <p class="time">{{ fork.posted_at }}</p>
             </a>
         </div>
         <div class="clear"></div>

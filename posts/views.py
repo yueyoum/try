@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 import json
 from functools import wraps
 
@@ -8,20 +7,29 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
-from django.db.models import F
+from django.utils import timezone
+from django.core.paginator import Paginator, InvalidPage
+# from django.db.models import F
 
-from config import redis_client, UPDATE_CHILD_COUNT_UNTIL
+from config import (
+    redis_client,
+    UPDATE_CHILD_COUNT_UNTIL,
+    MAX_FORK_AMOUNT,
+    MAX_ITEMS,
+    MAX_HEADERS,
+    MAX_TITLE_LENGTH,
+    MAX_CONTENT_LENGTH,
+)
+
 from notifyme import send_notify
 
 from .models import HeadPost, BodyPost
 
 
-MAX_ITEMS = 12
 
 
 
-
-def post_test(func):
+def post_guard(func):
     @wraps(func)
     def deco(request, *args, **kwargs):
         if not request.siteuser or request.method != 'POST':
@@ -29,15 +37,6 @@ def post_test(func):
         return func(request, *args, **kwargs)
     return deco
 
-
-
-def _scoring_guard(func):
-    @wraps(func)
-    def deco(self, request, *args, **kwargs):
-        if not request.siteuser or request.method != 'POST':
-            return self.response_nothing()
-        return func(self, request, *args, **kwargs)
-    return deco
 
 
 def set_post_child_count(posts):
@@ -50,22 +49,21 @@ def set_post_child_count(posts):
         setattr(posts[index], 'child_counts', int(cc) if cc else 0)
 
 
-def set_post_score_status(pobj, uid):
-    if uid:
-        setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
-        setattr(pobj, 'scored_bad', redis_client.sismember('bad.{0}'.format(uid), pobj.id))
-        setattr(pobj, 'scored', pobj.scored_good or pobj.scored_bad)
-    else:
-        setattr(pobj, 'scored_good', False)
-        setattr(pobj, 'scored_bad', False)
-        setattr(pobj, 'scored', False)
+# def set_post_score_status(pobj, uid):
+#     if uid:
+#         setattr(pobj, 'scored_good', redis_client.sismember('good.{0}'.format(uid), pobj.id))
+#         setattr(pobj, 'scored_bad', redis_client.sismember('bad.{0}'.format(uid), pobj.id))
+#         setattr(pobj, 'scored', pobj.scored_good or pobj.scored_bad)
+#     else:
+#         setattr(pobj, 'scored_good', False)
+#         setattr(pobj, 'scored_bad', False)
+#         setattr(pobj, 'scored', False)
 
 
 def get_body_lists(uid, start_id, length=MAX_ITEMS):
     result = []
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
-        set_post_score_status(body, uid)
         forks = BodyPost.objects.filter(parent_id=start_id)
         forks_count = forks.count()
         if forks_count == 0:
@@ -80,11 +78,7 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
             body_forks = forks
         else:
             # 有多个分支，首先根据跟帖数排序
-            body_forks = []
-            for _f in forks:
-                set_post_score_status(_f, uid)
-                body_forks.append(_f)
-
+            body_forks = list(forks)
             set_post_child_count(body_forks)
             body_forks.sort(key=lambda b: b.child_counts, reverse=True)
             setattr(body, 'post_forks', body_forks[1:])
@@ -96,7 +90,7 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
 
 
 
-@post_test
+@post_guard
 def post_new_head(request):
     """发布新的开头"""
     title = request.POST.get('title', None)
@@ -106,7 +100,10 @@ def post_new_head(request):
         res = {'ok': False, 'msg': '请填写标题和内容'}
         return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
-    # TODO title length and content length
+    if len(title) > MAX_TITLE_LENGTH or len(content) > MAX_CONTENT_LENGTH:
+        res = {'ok': False, 'msg': '标题或内容太长了'}
+        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+
 
     if HeadPost.objects.filter(title=title).exists():
         res = {'ok': False, 'msg': '标题已存在，换一个吧'}
@@ -125,14 +122,12 @@ def post_new_head(request):
         title=title,
     )
 
-
     url = reverse('show_post', kwargs={'post_id': body.id})
     res = {'ok': True, 'msg': url}
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
 
-
-@post_test
+@post_guard
 def post_new_body(request):
     """发布新的跟帖"""
     head_id = request.POST.get('head_id', None)
@@ -142,6 +137,10 @@ def post_new_body(request):
 
     if not content:
         res = {'ok': False, 'msg': '填写内容啊'}
+        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+
+    if len(content) > MAX_CONTENT_LENGTH:
+        res = {'ok': False, 'msg': '内容太长了'}
         return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
     try:
@@ -172,7 +171,7 @@ def post_new_body(request):
     else:
         redis_client.hincrby('childcount', head_id, 1)
 
-    HeadPost.objects.filter(id=head_id).update(updated_at=datetime.datetime.now())
+    HeadPost.objects.filter(id=head_id).update(updated_at=timezone.now())
 
 
     if BodyPost.objects.get(id=parent_id).user.id != request.siteuser.id:
@@ -193,7 +192,6 @@ def post_new_body(request):
     html = t.render(Context(ctx))
 
     res = {'ok': True, 'last': item_last, 'msg': html, 'itemid': new_body.id}
-
     return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
 
@@ -210,7 +208,6 @@ def show_post(request, post_id):
 
 
     data = {
-        'is_head': False,
         'title': title,
         'head_id': head_id,
         'items': posts,
@@ -220,35 +217,39 @@ def show_post(request, post_id):
     return render_to_response(
         'show_post.html',
         data,
-        context_instance = RequestContext(request)
+        context_instance=RequestContext(request)
     )
 
 
 
 
 
-def index(request):
+def index(request, p):
     """首页，取HeadPost"""
     posts = HeadPost.objects.all().order_by('-updated_at')
+    page_list = Paginator(posts, MAX_HEADERS)
 
-    uid = request.siteuser.id if request.siteuser else 0
-    items = []
-    for p in posts:
-        set_post_score_status(p, uid)
-        setattr(p, 'post_forks', False)
-        items.append(p)
+    p = int(p)
+    page = page_list.page(p)
+    items = page.object_list
 
     set_post_child_count(items)
-
     data = {
-        'is_head': True,
         'items': items,
+        'previous_link': False,
+        'next_link': False,
     }
+
+    if page.has_previous():
+        data['previous_link'] = '/p/{0}'.format(page.previous_page_number())
+    if page.has_next():
+        data['next_link'] = '/p/{0}'.format(page.next_page_number())
+
     return render_to_response(
             'index.html',
             data,
             context_instance=RequestContext(request)
-            )
+        )
 
 
 
@@ -257,51 +258,60 @@ def index(request):
 # bad.<uid>: set   保存此uid打过bad的所有post id
 
 
-class PostScoring(object):
-    def __init__(self, redis_client):
-        self.r = redis_client
-
-    def has_scored(self, uid, pid):
-        if self.r.sismember('good.{0}'.format(uid), pid):
-            return True
-
-        if self.r.sismember('bad.{0}'.format(uid), pid):
-            return True
-
-        return False
+# def _scoring_guard(func):
+#     @wraps(func)
+#     def deco(self, request, *args, **kwargs):
+#         if not request.siteuser or request.method != 'POST':
+#             return self.response_nothing()
+#         return func(self, request, *args, **kwargs)
+#     return deco
 
 
-    def post_exist(self, pid):
-        return BodyPost.objects.filter(id=pid)[:1].exists()
+# class PostScoring(object):
+#     def __init__(self, redis_client):
+#         self.r = redis_client
+
+#     def has_scored(self, uid, pid):
+#         if self.r.sismember('good.{0}'.format(uid), pid):
+#             return True
+
+#         if self.r.sismember('bad.{0}'.format(uid), pid):
+#             return True
+
+#         return False
 
 
-    def response_ok(self):
-        return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
-
-    def response_nothing(self):
-        return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
+#     def post_exist(self, pid):
+#         return BodyPost.objects.filter(id=pid)[:1].exists()
 
 
-    @_scoring_guard
-    def set_good(self, request, pid):
-        uid = request.siteuser.id
-        if not self.post_exist(pid) or self.has_scored(uid, pid):
-            return self.response_nothing()
+#     def response_ok(self):
+#         return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
 
-        self.r.sadd('good.{0}'.format(uid), pid)
-        BodyPost.objects.filter(id=pid).update(good=F('good')+1)
-        return self.response_ok()
+#     def response_nothing(self):
+#         return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
 
 
-    @_scoring_guard
-    def set_bad(self, request, pid):
-        uid = request.siteuser.id
-        if not self.post_exist(pid) or self.has_scored(uid, pid):
-            return self.response_nothing()
+#     @_scoring_guard
+#     def set_good(self, request, pid):
+#         uid = request.siteuser.id
+#         if not self.post_exist(pid) or self.has_scored(uid, pid):
+#             return self.response_nothing()
 
-        self.r.sadd('bad.{0}'.format(uid), pid)
-        BodyPost.objects.filter(id=pid).update(bad=F('bad')+1)
-        return self.response_ok()
+#         self.r.sadd('good.{0}'.format(uid), pid)
+#         BodyPost.objects.filter(id=pid).update(good=F('good')+1)
+#         return self.response_ok()
 
 
-post_scoring = PostScoring(redis_client)
+#     @_scoring_guard
+#     def set_bad(self, request, pid):
+#         uid = request.siteuser.id
+#         if not self.post_exist(pid) or self.has_scored(uid, pid):
+#             return self.response_nothing()
+
+#         self.r.sadd('bad.{0}'.format(uid), pid)
+#         BodyPost.objects.filter(id=pid).update(bad=F('bad')+1)
+#         return self.response_ok()
+
+
+# post_scoring = PostScoring(redis_client)

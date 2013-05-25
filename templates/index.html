@@ -27,4 +27,11 @@
     </div>
 {% endfor %}
 
+
+<div id="paginator">
+    {% if previous_link %}<a href="{{previous_link}}">上一页</a>{% endif %}
+    {% if next_link %}<a href="{{next_link}}">下一页</a>{% endif %}
+</div>
+
+
 {% endblock %}

@@ -1,24 +1,27 @@
+@mHeight: 32px;
+
 .modal {
     display: none;
 
     .header {
         color: @white;
         background-color: @blue;
+        height: @mHeight;
 
         .title {
-            // text here
-            padding: 10px;
             font-size: 16px;
             font-weight: bold;
             .left;
+            line-height: @mHeight;
+            padding-left: 10px;
         }
 
         .close {
-            // close button
             .right;
-            padding: 4px 10px;
             background-color: @blueDark;
             cursor: pointer;
+            line-height: @mHeight;
+            padding: 0 10px;
         }
     }
 

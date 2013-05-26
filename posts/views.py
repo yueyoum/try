@@ -115,12 +115,15 @@ def post_new_head(request):
     body = BodyPost.objects.create(
         user=request.siteuser,
         content=content,
+        posted_at=timezone.now(),
     )
 
     HeadPost.objects.create(
         id=body.id,
         user=request.siteuser,
         title=title,
+        posted_at=timezone.now(),
+        updated_at=timezone.now(),
     )
 
     url = reverse('show_post', kwargs={'post_id': body.id})
@@ -160,7 +163,8 @@ def post_new_body(request):
             user=request.siteuser,
             head_id=head_id,
             parent_id=parent_id,
-            content=content
+            content=content,
+            posted_at=timezone.now()
         )
     except Exception as e:
         print 'Error:', e
@@ -187,6 +191,7 @@ def post_new_body(request):
         send_notify(user, parent_id, url, u'{0} 你的帖子后有人跟帖'.format(title))
 
     setattr(new_body, 'child_counts', 0)
+    setattr(new_body, 'can_fork', True)
     if item_last:
         tpl = 'one_body.html'
         ctx = {'item': new_body, 'request': request}

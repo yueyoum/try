@@ -10,8 +10,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/jquery.bpopup.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.charcount.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/project.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js?ver={{ VER }}"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/project.js?ver={{ VER }}"></script>
     <!-- [if lte IE 6]>
     <![endif]-->
     {% block js %}
@@ -20,7 +20,7 @@
     <![endif]-->
 
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}square/css/square.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}square/css/square.css?ver={{ VER }}" />
     {% block css %}
     {% endblock %}
 </head>

@@ -34,12 +34,14 @@
             </div>
         -->
             <div class="right list-view-action">
+                {% if not forloop.last %}
                 {% if item.post_forks %}
                 <button class="button has-fork" fork-id="{{ item.id }}">
                     <div class="icon"></div>
                     <div class="text">收起分支</div>
                     <div class="clear"></div>
                 </button>
+                {% endif %}
                 {% endif %}
                 {% if not item.can_fork %}
                     <span class="fade small">无法添加分支</span>

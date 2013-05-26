@@ -59,3 +59,7 @@ class MyRedis(redis.Redis):
 
 redis_pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT)
 redis_client = MyRedis(connection_pool=redis_pool)
+
+
+def static_ver(request):
+    return {'VER': settings.VER}

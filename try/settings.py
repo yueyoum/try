@@ -7,6 +7,7 @@ CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 PROJECT_PATH = os.path.dirname(CURRENT_PATH)
 sys.path.insert(0, PROJECT_PATH)
 
+VER = 1
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -132,24 +133,25 @@ TEMPLATE_DIRS = (
 
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
+    # 'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
+    # 'django.core.context_processors.i18n',
+    # 'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
+    # 'django.contrib.messages.context_processors.messages',
+    'config.static_ver',
 )
 
 
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    # 'django.contrib.auth',
+    # 'django.contrib.contenttypes',
     'django.contrib.sessions',
     #'django.contrib.sites',
-    'django.contrib.messages',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',

@@ -41,7 +41,7 @@
                     <div class="clear"></div>
                 </button>
                 {% endif %}
-                {% if item.forks_count >= 6 %}
+                {% if not item.can_fork %}
                     <span class="fade small">无法添加分支</span>
                 {% else %}
                 <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.head }} parent-id={{ item.id }}>
@@ -56,13 +56,13 @@
     </div>
     <div class="clear"></div>
 
-    {% if not forloop.last %}
     <div class="forksarea" id="forksarea{{ item.id }}" show="1">
+    {% if not forloop.last %}
         {% if item.post_forks %}
             {% for fork in item.post_forks %}
                 {% include "one_fork.html" %}
             {% endfor %}
         {% endif %}
-    </div>
     {% endif %}
+    </div>
 </div>

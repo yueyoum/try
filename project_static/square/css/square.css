@@ -318,6 +318,7 @@ ul li {
 #nav-bar .nav-bar-inner div.menus .bottom ul {
   display: none;
   position: absolute;
+  z-index: 100;
 }
 #nav-bar .nav-bar-inner div.menus .bottom ul li {
   background-color: #545652;
@@ -466,7 +467,7 @@ body {
   background-color: #FFFFEE;
 }
 #notifya {
-  background-color: #01dfd7;
+  background-color: #01938e;
 }
 .none {
   display: none;

@@ -66,7 +66,7 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
         body = BodyPost.objects.get(id=start_id)
         forks = BodyPost.objects.filter(parent_id=start_id)
         forks_count = forks.count()
-        setattr(body, 'forks_count', forks_count)
+        setattr(body, 'can_fork', forks_count < MAX_FORK_AMOUNT)
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
             setattr(body, 'post_forks', [])
@@ -152,7 +152,7 @@ def post_new_body(request):
             res = {'ok': False, 'msg': '非法操作'}
             return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
-        if BodyPost.objects.filter(parent_id=head_id).count() >= MAX_FORK_AMOUNT:
+        if BodyPost.objects.filter(parent_id=parent_id).count() >= MAX_FORK_AMOUNT:
             res = {'ok': False, 'msg': '此处已到分支上限，无法添加分支'}
             return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
@@ -183,7 +183,8 @@ def post_new_body(request):
         # 自己跟自己，不用发消息
         url = reverse('show_post', kwargs={'post_id': parent_id})
         title = HeadPost.objects.get(id=head_id).title
-        send_notify(request.siteuser, parent_id, url, u'{0} 你的帖子后有人跟帖'.format(title))
+        user = BodyPost.objects.get(id=parent_id).user
+        send_notify(user, parent_id, url, u'{0} 你的帖子后有人跟帖'.format(title))
 
     setattr(new_body, 'child_counts', 0)
     if item_last:

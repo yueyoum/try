@@ -53,8 +53,8 @@
                         <li class="link"><a href="" id="accoutLogout">退出</a></li>
                     </ul>
                 {% else %}
+                    <a href="" class="open-modal righta" modal-window-id="register-modal">注册</a>
                     <a href="" class="open-modal righta" modal-window-id="login-modal">登录</a>
-                    <a href="" class="open-modal last righta" modal-window-id="register-modal">注册</a>
                 {% endif %}
                 <a href="" class="highlight open-modal righta" modal-window-id="{% if request.siteuser %}posthead-modal{% else %}login-modal{% endif %}">
                     发新贴

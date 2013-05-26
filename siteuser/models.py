@@ -10,6 +10,7 @@ from upload_avatar.app_settings import (
     UPLOAD_AVATAR_AVATAR_ROOT
 )
 
+from config import MAX_EMAIL_LENGTH, MAX_USERNAME_LENGTH, MAX_SIGN_LENGTH
 
 class SiteUserManager(models.Manager):
     def create(self, is_social, **kwargs):
@@ -49,7 +50,7 @@ class SocialUser(models.Model):
 
 class InnerUser(models.Model):
     user = models.OneToOneField('SiteUser', related_name='inner_user')
-    email = models.CharField(max_length=128, unique=True)
+    email = models.CharField(max_length=MAX_EMAIL_LENGTH, unique=True)
     passwd = models.CharField(max_length=40)
 
     objects = InnerUserManager()
@@ -61,9 +62,9 @@ class SiteUser(models.Model):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
-    sign = models.CharField(max_length=24, blank=True)
+    sign = models.CharField(max_length=MAX_SIGN_LENGTH, blank=True)
 
-    username = models.CharField(max_length=32)
+    username = models.CharField(max_length=MAX_USERNAME_LENGTH, db_index=True)
     # avatar_url for social user
     avatar_url = models.CharField(max_length=255, blank=True)
     # avatar_name for inner user uploaded avatar

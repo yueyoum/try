@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator
 # from django.db.models import F
 
 from config import (

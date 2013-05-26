@@ -81,6 +81,16 @@
                 return false;
             }
 
+            if(email.length > 128) {
+                make_warning('#registerWarning', '邮箱地址太长');
+                return false;
+            }
+
+            if(username.length > 12) {
+                make_warning('#registerWarning', '用户名太长');
+                return false;
+            }
+
 
             $.ajax(
                 {
@@ -144,7 +154,7 @@
             mysign = strip(mysign);
 
 
-            if(mysign.length==0) {
+            if(mysign.length===0) {
                 return false;
             }
 
@@ -164,11 +174,11 @@
                             $('#mySign').val('');
                         }
                         else {
-                            make_warning('#loginWarning', data.msg);
+                            make_warning('#mySignWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#loginWarning', '发生错误，请稍后再试');
+                        make_warning('#mySignWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -383,6 +393,13 @@
 
         $('#nBodyContent').charcount({
             maxLength: 255,
+            position: 'none'
+        }).bind('update', function(evt, length, remaining){
+            $(this).next().find('span').text(remaining);
+        });
+
+        $('#mySign').charcount({
+            maxLength: 24,
             position: 'none'
         }).bind('update', function(evt, length, remaining){
             $(this).next().find('span').text(remaining);

@@ -103,7 +103,7 @@
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#registerWarning', '发生错误，请稍后再试')
+                        make_warning('#registerWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -168,7 +168,7 @@
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#loginWarning', '发生错误，请稍后再试')
+                        make_warning('#loginWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -187,7 +187,7 @@
             title = strip(title);
             content = strip(content);
 
-            if(title.length == 0 || content.length == 0) {
+            if(title.length === 0 || content.length === 0) {
                 make_warning('#postHeadWarning', '填写标题和内容啊魂淡！');
                 return false;
             }
@@ -213,7 +213,7 @@
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#postHeadWarning', '发生错误，请稍后再试')
+                        make_warning('#postHeadWarning', '发生错误，请稍后再试');
                     }
                 }
             );
@@ -239,7 +239,7 @@
 
             content = strip(content);
 
-            if(content.length == 0) {
+            if(content.length === 0) {
                 make_warning('#postBodyWarning', '填写内容啊魂淡！');
                 return false;
             }
@@ -261,11 +261,14 @@
                     success: function(data){
                         if(data.ok) {
                             $('#postbody-modal').bPopup().close();
+                            $('#nBodyContent').val('');
                             if(data.last){
                                 $('#item' + parent_id).after(data.msg);
                                 var $item_line = $('<div class="item-line" />');
                                 $item_line.css('height', $('#item' + parent_id).height());
                                 $('#item' + parent_id).append($item_line);
+                                $('#item' + parent_id).attr('item-last', 0);
+                                $('#item' + data.itemid).attr('item-last', 1);
                             }
                             else{
                                 $('#forksarea' + parent_id).append(data.msg);
@@ -280,21 +283,23 @@
                                     }
                                 }
                             }
-
+                            toggle_list_view_action();
+                            open_body_modal();
                             $('html').scrollTo('#item' + data.itemid, 200);
                         }
                         else {
-                            make_warning('#postHeadWarning', data.msg);
+                            make_warning('#postBodyWarning', data.msg);
                         }
                     },
                     error: function(XmlHttprequest, textStatus, errorThrown){
-                        make_warning('#postHeadWarning', '发生错误，请稍后再试');
+                        make_warning('#postBodyWarning', '发生错误，请稍后再试');
                     }
                 }
             );
         });
 
 
+        /*
         $('.can-score-good').click(function(){
             var pid = $(this).attr('id').split('-')[1];
             $.ajax(
@@ -358,6 +363,7 @@
                 }
             );
         });
+*/
 
 
         // input character limit
@@ -410,11 +416,7 @@
 
 
         // list-view-action
-        $('.list-view .content').mouseenter(function(){
-            $(this).find('.list-view-action').show();
-        }).mouseleave(function(){
-            $(this).find('.list-view-action').hide();
-        })
+        toggle_list_view_action();
 
 
 
@@ -455,14 +457,16 @@
         // fork-line-var height
         $('.list-view').each(function(index, obj){
             $(obj).find('.item-line').css('height', $(obj).height() + 20);
-        })
+        });
 
 
+        /*
         $('.content').mouseover(function(){
             $(this).parent().find('.avatar img').first().addClass('bigger');
         }).mouseout(function(){
             $(this).parent().find('.avatar img').first().removeClass('bigger');
         });
+*/
 
         $('.index-item').mouseover(function(){
             $(this).find('.avatar img').first().addClass('bigger');
@@ -472,11 +476,11 @@
 
 
         // background highlight for cursor hover
-        $('.index-item, .list-view .content ').mouseover(function(){
+        $('.index-item').mouseover(function(){
             $(this).addClass('item-bg-yellowLight');
         }).mouseout(function(){
             $(this).removeClass('item-bg-yellowLight');
-        })
+        });
 
 
         get_notifies();
@@ -492,6 +496,26 @@
         return $('input[name=csrfmiddlewaretoken]').attr('value');
     }
 
+
+    function toggle_list_view_action() {
+        $('.list-view .content').bind('mouseenter', function(){
+            // $(this).unbind('mouseenter');
+            $(this).find('.list-view-action').show();
+            $(this).addClass('item-bg-yellowLight');
+            $(this).parent().find('.avatar img').first().addClass('bigger');
+        }).bind('mouseleave', function(){
+            // $(this).unbind('mouseleave');
+            $(this).find('.list-view-action').hide();
+            $(this).removeClass('item-bg-yellowLight');
+            $(this).parent().find('.avatar img').first().removeClass('bigger');
+        });
+    }
+
+    // $('.list-view .content').mouseenter(function(){
+    //     $(this).find('.list-view-action').show();
+    // }).mouseleave(function(){
+    //     $(this).find('.list-view-action').hide();
+    // });
 
 
 
@@ -575,7 +599,6 @@
 
     function bind_noify_click_event() {
         $('a.notifyme').click(function(){
-            console.log('click...');
             var nid = $(this).attr('noti-id');
             $.ajax(
                 {

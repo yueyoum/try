@@ -477,6 +477,12 @@ a {
 a:hover {
   color: #ff0080;
 }
+.fade {
+  color: #666;
+}
+.small {
+  font-size: 12px;
+}
 .warning {
   color: red;
   margin-top: 10px;

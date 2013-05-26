@@ -29,24 +29,9 @@
             open_modal_window(wid);
         });
 
+        open_body_modal();
 
-        $('.open-body-modal').bind('click', function(e){
-            e.preventDefault();
-            var wid = $(this).attr('modal-window-id');
 
-            var text = $(this).parent().parent().parent().find('p.text').text();
-            $('#' + wid).find('div.oldtext').text(text);
-            open_modal_window(wid);
-
-            var head_id, parent_id;
-            head_id = $(this).attr('head-id');
-            parent_id = $(this).attr('parent-id');
-            if(head_id !== undefined && parent_id !== undefined) {
-                $('#nBodyHeadID').val(head_id);
-                $('#nBodyParentID').val(parent_id);
-            }
-
-        });
 
 
         $('#postbody-modal').find('.close').bind('click', function(){
@@ -115,6 +100,11 @@
     })();
 
 
+
+
+
+})(window, jQuery);
+
     // open modal window
     var open_modal_window = (function(){
         var pstyle = navigator.appName === 'Microsoft Internet Explorer' ? 'absolute' : 'fixed';
@@ -137,5 +127,23 @@
         return _open;
     })();
 
-})(window, jQuery);
+
+    function open_body_modal() {
+        $('.open-body-modal').bind('click', function(e){
+            e.preventDefault();
+            var wid = $(this).attr('modal-window-id');
+
+            var text = $(this).parent().parent().parent().find('p.text').text();
+            $('#' + wid).find('div.oldtext').text(text);
+            open_modal_window(wid);
+
+            var head_id, parent_id;
+            head_id = $(this).attr('head-id');
+            parent_id = $(this).attr('parent-id');
+            if(head_id !== undefined && parent_id !== undefined) {
+                $('#nBodyHeadID').val(head_id);
+                $('#nBodyParentID').val(parent_id);
+            }
+        });
+    }
 

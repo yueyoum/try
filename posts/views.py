@@ -3,12 +3,12 @@ import json
 from functools import wraps
 
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader, Context
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import Paginator, EmptyPage
 # from django.db.models import F
 
 from config import (
@@ -66,6 +66,7 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
         body = BodyPost.objects.get(id=start_id)
         forks = BodyPost.objects.filter(parent_id=start_id)
         forks_count = forks.count()
+        setattr(body, 'forks_count', forks_count)
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
             setattr(body, 'post_forks', [])
@@ -151,6 +152,10 @@ def post_new_body(request):
             res = {'ok': False, 'msg': '非法操作'}
             return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
 
+        if BodyPost.objects.filter(parent_id=head_id).count() >= MAX_FORK_AMOUNT:
+            res = {'ok': False, 'msg': '此处已到分支上限，无法添加分支'}
+            return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+
         new_body = BodyPost.objects.create(
             user=request.siteuser,
             head_id=head_id,
@@ -183,7 +188,7 @@ def post_new_body(request):
     setattr(new_body, 'child_counts', 0)
     if item_last:
         tpl = 'one_body.html'
-        ctx = {'item': new_body}
+        ctx = {'item': new_body, 'request': request}
     else:
         tpl = 'one_fork.html'
         ctx = {'fork': new_body}
@@ -200,8 +205,11 @@ def post_new_body(request):
 def show_post(request, post_id):
     """展示post_id及其后续的posts"""
     uid = request.siteuser.id if request.siteuser else 0
-    head_id = BodyPost.objects.get(id=post_id).head
-    title = HeadPost.objects.get(id=head_id).title
+    try:
+        head_id = BodyPost.objects.get(id=post_id).head
+        title = HeadPost.objects.get(id=head_id).title
+    except:
+        raise Http404
 
     posts = get_body_lists(uid, post_id)
     set_post_child_count(posts)
@@ -230,6 +238,8 @@ def index(request, p):
     page_list = Paginator(posts, MAX_HEADERS)
 
     p = int(p)
+    if p < 1 or p > page_list.num_pages:
+        raise Http404
     page = page_list.page(p)
     items = page.object_list
 

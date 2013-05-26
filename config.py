@@ -14,7 +14,7 @@ MAX_ITEMS = 12
 # Head 后面有多少跟帖后就不再更新 Body 的跟帖数量
 UPDATE_CHILD_COUNT_UNTIL = 1000
 # 每个body后面最多有几个分叉
-MAX_FORK_AMOUNT = 6
+MAX_FORK_AMOUNT = 5
 
 # 标题最大长度
 MAX_TITLE_LENGTH = 40

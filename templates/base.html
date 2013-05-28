@@ -10,6 +10,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/jquery.bpopup.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.charcount.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jit.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/tree.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}square/js/square.js?ver={{ VER }}"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/project.js?ver={{ VER }}"></script>
     <!-- [if lte IE 6]>
@@ -74,7 +76,9 @@
 <div id="main">
     <div id="mainLeft">{% block mainLeft %}{% endblock %}</div>
     <div id="mainRight">
+        {% block mainRight %}
         {% include "right_side.html" %}
+        {% endblock %}
     </div>
     <div class="clear"></div>
 </div>

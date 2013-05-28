@@ -91,6 +91,29 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
 
 
 
+
+def _tree_struct(head_id, head):
+    children = BodyPost.objects.filter(parent_id=head_id).values_list('id')
+    if not children:
+        return
+
+    children_ids = [c[0] for c in children]
+    for cid in children_ids:
+        x = {'id': cid, 'name': '#{0}'.format(cid), 'data': {}, 'children': []}
+        head['children'].append(x)
+        _tree_struct(cid, x)
+
+
+
+def tree_struct(request, head_id):
+    res = {'id': head_id, 'name': '#{0}'.format(head_id), 'data': {}, 'children': []}
+    _tree_struct(head_id, res)
+    return HttpResponse(json.dumps(res), mimetype='application/json')
+
+
+
+
+
 @post_guard
 def post_new_head(request):
     """发布新的开头"""
@@ -99,16 +122,16 @@ def post_new_head(request):
 
     if not title or not content:
         res = {'ok': False, 'msg': '请填写标题和内容'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
     if len(title) > MAX_TITLE_LENGTH or len(content) > MAX_CONTENT_LENGTH:
         res = {'ok': False, 'msg': '标题或内容太长了'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
 
     if HeadPost.objects.filter(title=title).exists():
         res = {'ok': False, 'msg': '标题已存在，换一个吧'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
     # check done, save it
 
@@ -128,7 +151,7 @@ def post_new_head(request):
 
     url = reverse('show_post', kwargs={'post_id': body.id})
     res = {'ok': True, 'msg': url}
-    return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+    return HttpResponse(json.dumps(res), mimetype='application/json')
 
 
 @post_guard
@@ -141,11 +164,11 @@ def post_new_body(request):
 
     if not content:
         res = {'ok': False, 'msg': '填写内容啊'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
     if len(content) > MAX_CONTENT_LENGTH:
         res = {'ok': False, 'msg': '内容太长了'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
     try:
         head_id = int(head_id)
@@ -153,11 +176,11 @@ def post_new_body(request):
 
         if not HeadPost.objects.filter(id=head_id).exists():
             res = {'ok': False, 'msg': '非法操作'}
-            return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+            return HttpResponse(json.dumps(res), mimetype='application/json')
 
         if BodyPost.objects.filter(parent_id=parent_id).count() >= MAX_FORK_AMOUNT:
             res = {'ok': False, 'msg': '此处已到分支上限，无法添加分支'}
-            return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+            return HttpResponse(json.dumps(res), mimetype='application/json')
 
         new_body = BodyPost.objects.create(
             user=request.siteuser,
@@ -169,7 +192,7 @@ def post_new_body(request):
     except Exception as e:
         print 'Error:', e
         res = {'ok': False, 'msg': '发生错误，待会再试'}
-        return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+        return HttpResponse(json.dumps(res), mimetype='application/json')
 
     # 设置redis中的 parent 和 childcount
     redis_client.hset('parent', new_body.id, parent_id)
@@ -203,7 +226,7 @@ def post_new_body(request):
     html = t.render(Context(ctx))
 
     res = {'ok': True, 'last': item_last, 'msg': html, 'itemid': new_body.id}
-    return HttpResponse(json.dumps(res), mimetype='applicatioin/json')
+    return HttpResponse(json.dumps(res), mimetype='application/json')
 
 
 
@@ -302,10 +325,10 @@ def index(request, p):
 
 
 #     def response_ok(self):
-#         return HttpResponse(json.dumps(1), mimetype='applicatioin/json')
+#         return HttpResponse(json.dumps(1), mimetype='application/json')
 
 #     def response_nothing(self):
-#         return HttpResponse(json.dumps(0), mimetype='applicatioin/json')
+#         return HttpResponse(json.dumps(0), mimetype='application/json')
 
 
 #     @_scoring_guard

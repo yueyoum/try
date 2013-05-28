@@ -4,6 +4,7 @@
 
 {% block mainLeft %}
 <h2 class="title"><a href="/posts/{{ head_id }}">{{ title }}</a></h2>
+<div id="headID" class="none">{{ head_id }}</div>
 
     {% for item in items %}
         {% include "one_body.html" %}
@@ -16,4 +17,9 @@
         后续无跟帖，返回 <a href="/posts/{{ head_id }}">故事开头</a> 
         {% endif %}
     </div>
+{% endblock %}
+
+{% block mainRight %}
+    <div id="treeNavs" style="width: 300px; height: 500px; background-color: #333; overflow: hidden;"></div>
+    {{ block.super }}
 {% endblock %}

@@ -61,7 +61,8 @@ def set_post_child_count(posts):
 
 
 def get_body_lists(uid, start_id, length=MAX_ITEMS):
-    result = []
+    result = [] 
+    level_label = None
     for i in xrange(length):
         body = BodyPost.objects.get(id=start_id)
         forks = BodyPost.objects.filter(parent_id=start_id)
@@ -70,19 +71,30 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
             setattr(body, 'post_forks', [])
+            setattr(body, 'level_label', body.level)
             result.append(body)
             return result
 
         if forks_count == 1:
             # 没有分支，只有一个跟帖
             setattr(body, 'post_forks', [])
+            setattr(body, 'level_label', body.level)
             body_forks = forks
         else:
             # 有多个分支，首先根据跟帖数排序
             body_forks = list(forks)
             set_post_child_count(body_forks)
             body_forks.sort(key=lambda b: b.child_counts, reverse=True)
+            # for index, b in enumerate(body_forks):
+            #     setattr(b, 'level_label', '{0}{1}'.format(b.level, ALPHABET[index]))
+            for index in range(len(body_forks)):
+                setattr(body_forks[index], 'level_label', '{0}{1}'.format(body_forks[index].level, ALPHABET[index]))
             setattr(body, 'post_forks', body_forks[1:])
+            if level_label:
+                setattr(body, 'level_label', level_label)
+            else:
+                setattr(body, 'level_label', body.level)
+            level_label = body_forks[0].level_label
 
         result.append(body)
         start_id = body_forks[0].id
@@ -91,22 +103,27 @@ def get_body_lists(uid, start_id, length=MAX_ITEMS):
 
 
 
-
+ALPHABET = [chr(i) for i in range(97, 123)]
 def _tree_struct(head_id, head):
     children = BodyPost.objects.filter(parent_id=head_id).values_list('id')
     if not children:
         return
 
     children_ids = [c[0] for c in children]
-    for cid in children_ids:
-        x = {'id': cid, 'name': '#{0}'.format(cid), 'data': {}, 'children': []}
+    if len(children_ids) == 1:
+        x = {'id': children_ids[0], 'name': ' ', 'data': {'b': ''}, 'children': []}
         head['children'].append(x)
-        _tree_struct(cid, x)
+        _tree_struct(children_ids[0], x)
+    else:
+        for index, cid in enumerate(children_ids):
+            x = {'id': cid, 'name': '', 'data': {'b': ALPHABET[index]}, 'children': []}
+            head['children'].append(x)
+            _tree_struct(cid, x)
 
 
 
 def tree_struct(request, head_id):
-    res = {'id': head_id, 'name': '#{0}'.format(head_id), 'data': {}, 'children': []}
+    res = {'id': head_id, 'name': '', 'data': {'b': ''}, 'children': []}
     _tree_struct(head_id, res)
     return HttpResponse(json.dumps(res), mimetype='application/json')
 
@@ -139,6 +156,7 @@ def post_new_head(request):
         user=request.siteuser,
         content=content,
         posted_at=timezone.now(),
+        level=1,
     )
 
     HeadPost.objects.create(
@@ -182,12 +200,14 @@ def post_new_body(request):
             res = {'ok': False, 'msg': '此处已到分支上限，无法添加分支'}
             return HttpResponse(json.dumps(res), mimetype='application/json')
 
+        parent_level = BodyPost.objects.get(id=parent_id).level
         new_body = BodyPost.objects.create(
             user=request.siteuser,
             head_id=head_id,
             parent_id=parent_id,
             content=content,
-            posted_at=timezone.now()
+            posted_at=timezone.now(),
+            level=parent_level+1,
         )
     except Exception as e:
         print 'Error:', e
@@ -247,6 +267,7 @@ def show_post(request, post_id):
     data = {
         'title': title,
         'head_id': head_id,
+        'start_id': post_id,
         'items': posts,
         'next_start_id': posts[-1].id,
         'next_body_counts': posts[-1].child_counts,

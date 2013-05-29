@@ -1,27 +1,19 @@
-function inittree(data) {
-    //Create a new ST instance
+function inittree(data, start_id) {
     var st = new $jit.ST({
         orientation: 'top',
-        //id of viz container element
         injectInto: 'treeNavs',
-        //set duration for the animation
         duration: 300,
-        //set animation transition type
         transition: $jit.Trans.Quart.easeInOut,
-        //set distance between node and its children
-        levelDistance: 50,
-        //enable panning
+        levelDistance: 40,
+        levelsToShow: 4,
         Navigation: {
           enable:true,
           panning:true
         },
-        //set node and edge styles
-        //set overridable=true for styling individual
-        //nodes or edges
         Node: {
             height: 20,
-            width: 60,
-            dim: 22,
+            width: 40,
+            dim: 30,
             type: 'circle',
             color: '#aaa',
             overridable: true
@@ -40,23 +32,25 @@ function inittree(data) {
             // Log.write("done");
         },
 
-        //This method is called on DOM label creation.
-        //Use this method to add event handlers and styles to
-        //your node.
         onCreateLabel: function(label, node){
             label.id = node.id;
-            label.innerHTML = node.name;
+            label.innerHTML = '#' + (node._depth + 1) + node.data.b;
             label.onclick = function(){
               st.onClick(node.id);
-              // alert(node.data.text);
+              var $thisItem = $('#item' + node.id);
+              if($thisItem.length){
+                $('html').scrollTo('#item' + node.id, 200);
+              }
+              else{
+                window.location.href = '/posts/' + node.id;
+              }
             };
-            //set label styles
             var style = label.style;
-            style.width = 60 + 'px';
-            style.height = 17 + 'px';
+            style.width = 40 + 'px';
+            style.height = 20 + 'px';
             style.cursor = 'pointer';
-            style.color = '#333';
-            style.fontSize = '0.8em';
+            style.color = '#fff';
+            style.fontSize = '12px';
             style.textAlign= 'center';
             style.paddingTop = '3px';
         },
@@ -70,11 +64,12 @@ function inittree(data) {
             //add some color to the nodes in the path between the
             //root node and the selected node.
             if (node.selected) {
-                node.data.$color = "#ff7";
+                node.data.$color = "#01938E";
             }
             else {
                 delete node.data.$color;
                 //if the node belongs to the last plotted level
+                /*
                 if(!node.anySubnode("exist")) {
                     //count children number
                     var count = 0;
@@ -83,6 +78,7 @@ function inittree(data) {
                     //how many children it has
                     node.data.$color = ['#aaa', '#baa', '#caa', '#daa', '#eaa', '#faa'][count];                    
                 }
+                */
             }
         },
 
@@ -93,7 +89,7 @@ function inittree(data) {
         //override the Edge global style properties.
         onBeforePlotLine: function(adj){
             if (adj.nodeFrom.selected && adj.nodeTo.selected) {
-                adj.data.$color = "#eed";
+                adj.data.$color = "#08ACA6";
                 adj.data.$lineWidth = 3;
             }
             else {
@@ -109,16 +105,18 @@ function inittree(data) {
     //optional: make a translation of the tree
     st.geom.translate(new $jit.Complex(-200, 0), "current");
     //emulate a click on the root node.
-    st.onClick(st.root);
+    st.onClick(start_id);
     //end
     //Add event handlers to switch spacetree orientation.
+    return st;
 }
 
 
 $(function(){
     var head_id = $('#headID').text();
-    console.log(head_id);
-    if(head_id!=="" && head_id!==undefined){
+    var start_id = $('#startID').text();
+    var st;
+    if(head_id!=="" && start_id!==""){
           $.ajax(
             {
               type: 'GET',
@@ -127,7 +125,7 @@ $(function(){
               dataType: 'json',
               async: false,
               success: function(data){
-                inittree(data);
+                st = inittree(data, start_id);
               },
               error: function(a, b, c) {
                 console.log('get data error...');
@@ -135,4 +133,9 @@ $(function(){
             }
           );
     }
+
+    $('.list-view .content').mouseenter(function(){
+        var pid = $(this).attr('id').split('content')[1];
+        st.onClick(pid);
+    });
 });

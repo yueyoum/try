@@ -5,6 +5,7 @@
 {% block mainLeft %}
 <h2 class="title"><a href="/posts/{{ head_id }}">{{ title }}</a></h2>
 <div id="headID" class="none">{{ head_id }}</div>
+<div id="startID" class="none">{{ start_id }}</div>
 
     {% for item in items %}
         {% include "one_body.html" %}
@@ -20,6 +21,9 @@
 {% endblock %}
 
 {% block mainRight %}
-    <div id="treeNavs" style="width: 300px; height: 500px; background-color: #333; overflow: hidden;"></div>
+    <div class="box" style="position: fixed;">
+        <div class="header">导航</div>
+            <div id="treeNavs" style="width: 300px; height: 400px; overflow: hidden;"></div>
+    </div>
     {{ block.super }}
 {% endblock %}

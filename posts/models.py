@@ -43,6 +43,9 @@ class BodyPost(models.Model):
     content = models.CharField(max_length=MAX_CONTENT_LENGTH)
     posted_at = models.DateTimeField(default=timezone.now())
 
+    level = models.PositiveIntegerField()
+    # branch = models.CharField(max_length=1, blank=True)
+
     # good = models.PositiveIntegerField(default=0)
     # bad = models.PositiveIntegerField(default=0)
 

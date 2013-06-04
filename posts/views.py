@@ -61,43 +61,38 @@ def set_post_child_count(posts):
 
 
 def get_body_lists(uid, start_id, length=MAX_ITEMS):
-    result = [] 
-    level_label = None
+    result = []
+
+    body = BodyPost.objects.get(id=start_id)
+    setattr(body, 'level_label', body.level)
+    result.append(body)
     for i in xrange(length):
-        body = BodyPost.objects.get(id=start_id)
-        forks = BodyPost.objects.filter(parent_id=start_id)
+        body = result[-1]
+        forks = BodyPost.objects.filter(parent_id=body.id)
         forks_count = forks.count()
         setattr(body, 'can_fork', forks_count < MAX_FORK_AMOUNT)
         if forks_count == 0:
             # 到这里就结束了，后面没有跟帖了
-            setattr(body, 'post_forks', [])
             setattr(body, 'level_label', body.level)
-            result.append(body)
+            setattr(body, 'branches', [])
             return result
 
         if forks_count == 1:
             # 没有分支，只有一个跟帖
-            setattr(body, 'post_forks', [])
             setattr(body, 'level_label', body.level)
-            body_forks = forks
-        else:
-            # 有多个分支，首先根据跟帖数排序
-            body_forks = list(forks)
-            set_post_child_count(body_forks)
-            body_forks.sort(key=lambda b: b.child_counts, reverse=True)
-            # for index, b in enumerate(body_forks):
-            #     setattr(b, 'level_label', '{0}{1}'.format(b.level, ALPHABET[index]))
-            for index in range(len(body_forks)):
-                setattr(body_forks[index], 'level_label', '{0}{1}'.format(body_forks[index].level, ALPHABET[index]))
-            setattr(body, 'post_forks', body_forks[1:])
-            if level_label:
-                setattr(body, 'level_label', level_label)
-            else:
-                setattr(body, 'level_label', body.level)
-            level_label = body_forks[0].level_label
+            setattr(body, 'branches', [])
+            result.append(forks[0])
+            continue
 
-        result.append(body)
-        start_id = body_forks[0].id
+        # 有多个分支，首先根据跟帖数排序
+        body_forks = list(forks)
+        set_post_child_count(body_forks)
+        body_forks.sort(key=lambda b: b.child_counts, reverse=True)
+        for index in range(len(body_forks)):
+            setattr(body_forks[index], 'level_label', '{0}{1}'.format(body_forks[index].level, ALPHABET[index]))
+
+        setattr(body_forks[0], 'branches', body_forks[1:])
+        result.append(body_forks[0])
 
     return result
 

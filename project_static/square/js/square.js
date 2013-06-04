@@ -26,6 +26,7 @@
         $('.open-modal').bind('click', function(e){
             e.preventDefault();
             var wid = $(this).attr('modal-window-id');
+            console.log(wid);
             open_modal_window(wid);
         });
 
@@ -110,12 +111,12 @@
         var pstyle = navigator.appName === 'Microsoft Internet Explorer' ? 'absolute' : 'fixed';
 
         var _open = function(wid) {
-            if($('#'+wid).attr('auto-close') === '1') {
-                $('#' + wid).children('.header').children('.close').bind('click', function(){
-                    $(this).unbind('click');
-                    $('#' + wid).bPopup().close();
-                });
-            }
+            // if($('#'+wid).attr('auto-close') === '1') {
+            //     $('#' + wid).children('.header').children('.close').bind('click', function(){
+            //         $(this).unbind('click');
+            //         $('#' + wid).bPopup().close();
+            //     });
+            // }
             $('#' + wid).bPopup({
                 followSpeed: 100,
                 opacity: 0.4,

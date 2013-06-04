@@ -1,70 +1,63 @@
-<div class="list-view" id="item{{ item.id }}"  item-last="{% if forloop.last %}1{% else %}0{% endif %}">
-    <div class="avatar">
-        <a href="">
-        <img src="{{ item.user.avatar }}" alt="" width="48px" height="48px"/>
-        </a>
-    </div>
-
-    {% if not forloop.last %}
-    <div class="item-line {% if item.post_forks %}fork{% endif %}"></div>
-    {% endif %}
-
-    <div class="content" id="content{{ item.id }}">
-        <p class="name">
-            <a href="">{{ item.user.username }}</a>
-            {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
-            <span class="time">{{ item.posted_at }}</span>
-        </p>
-
-        <p class="text">{{ item.level_label }}|{{ item.content }}</p>
-
-        <div class="extra">
-            <!--
-            <div class="left">
-                <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-good{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="0px 0px" id="scoregood-{{ item.id }}" modal-window-id="login-modal">
-                    <div class="icon good {% if item.scored_good %}scored-good{% endif %}"></div>
-                    <div class="num">{{ item.good }}</div>
-                    <div class="clear"></div>
-                </button>
-                <button class="button item-button {% if request.siteuser %}{% if not item.scored %}can-score-bad{% endif %}{% else %}open-modal{% endif %}" hover_bg_pos="-1px -48px" id="scorebad-{{ item.id }}" modal-window-id="login-modal">
-                    <div class="icon bad {% if item.scored_bad %}scored-bad{% endif %}"></div>
-                    <div class="num">{{ item.bad }}</div>
-                    <div class="clear"></div>
-                </button>
-            </div>
-        -->
-            <div class="right list-view-action">
-                {% if not forloop.last %}
-                {% if item.post_forks %}
-                <button class="button has-fork" fork-id="{{ item.id }}">
-                    <div class="icon"></div>
-                    <div class="text">收起分支</div>
-                    <div class="clear"></div>
-                </button>
-                {% endif %}
-                {% endif %}
-                {% if not item.can_fork %}
-                    <span class="fade small">无法添加分支</span>
-                {% else %}
-                <button class="button write-new open-body-modal" modal-window-id="{% if request.siteuser %}postbody-modal{% else %}login-modal{% endif %}" head-id={{ item.head }} parent-id={{ item.id }}>
-                    <div class="icon"></div>
-                    <div class="text">写后续</div>
-                    <div class="clear"></div>
-                </button>
-                {% endif %}
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <div class="clear"></div>
-
-    <div class="forksarea" id="forksarea{{ item.id }}" show="1">
-    {% if not forloop.last %}
-        {% if item.post_forks %}
-            {% for fork in item.post_forks %}
-                {% include "one_fork.html" %}
+<div class="list-item" id="item{{ item.id }}"  item-last="{% if forloop.last %}1{% else %}0{% endif %}">
+    <div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab{{ item.id }}" data-toggle="tab">
+            <img src="{{ item.user.avatar }}" alt="" />
+            <span class="muted">{{ item.level_label }}</span>
+            </a>
+        </li>
+        {% if item.branches %}
+            {% for b in item.branches %}
+            <li>
+                <a href="#tab{{ b.id }}" data-toggle="tab">
+                <img src="{{ b.user.avatar }}" alt="" />
+                <span class="muted">{{ b.level_label }}</span>
+                </a>
+            </li>
             {% endfor %}
         {% endif %}
-    {% endif %}
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab{{ item.id }}">
+            <div class="content" id="content{{ item.id }}">
+                <p class="muted">
+                    <small>
+                        <a href="">{{ item.user.username }}</a>
+                        {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
+                        <span class="time">{{ item.posted_at }}</span>
+                    </small>
+                </p>
+
+                <p>{{ item.content }}</p>
+
+                <p class="item-action muted">
+                    <span>写后续</span>
+                </p>
+            </div>
+        </div>
+        {% if item.branches %}
+            {% for b in item.branches %}
+            <div class="tab-pane" id="tab{{ b.id }}">
+                <div class="content" id="content{{ b.id }}">
+                    <p class="muted">
+                        <small>
+                            <a href="">{{ b.user.username }}</a>
+                            {% if b.user.sign %}( {{ b.user.sign }} ){% endif %}
+                            <span class="time">{{ b.posted_at }}</span>
+                        </small>
+                    </p>
+
+                    <p>{{ b.content }}</p>
+
+                    <p class="item-action muted">
+                        <span>写后续</span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
+    </div>
+
 </div>

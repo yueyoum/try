@@ -6,22 +6,21 @@
     <div class="index-item">
         <div class="avatar">
             <a href="">
-            <img src="{{ item.user.avatar }}" alt="" width="48px" height="48px"/>
+            <img src="{{ item.user.avatar }}" alt="{{ item.user.username }}" />
             </a>
         </div>
-        <div class="rightBlock">
-            <p class="name">
+        <div class="content span9">
+            <p class="muted">
+                <small>
                 <a href="">{{ item.user.username }}</a>
                 {% if item.user.sign %}( {{ item.user.sign }} ){% endif %}
+                </small>
             </p>
-            <div class="main">
-                <a href="/posts/{{ item.id }}">
-                    <p class="title">{{ item.title }}</p>
-                    <p class="child-num">{{ item.child_counts }}</p>
-                    <div class="clear"></div>
-                </a>
-            </div>
-            <p class="time">发表于: {{ item.posted_at }} 更新于: {{ item.updated_at }}</p>
+            <h4><a href="/posts/{{ item.id }}">{{ item.title }}</a></h4>
+            <p class="muted"><small>发表于: {{ item.posted_at }} 更新于: {{ item.updated_at }}</small></p>
+        </div>
+        <div class="span1">
+            <span class="badge badge-info">{{ item.child_counts }}</span>
         </div>
         <div class="clear"></div>
     </div>
